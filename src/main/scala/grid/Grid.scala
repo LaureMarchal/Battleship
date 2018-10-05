@@ -6,6 +6,12 @@ import ship.{Position, Ship}
 
 case class Grid(grid: List[List[CaseType]]) {
 
+
+  def updateCaseOnGrid(grid: Grid, caseType: CaseType, position: Position):Grid = {
+    var gridCopy = grid.copy()
+    println(gridCopy.grid)
+    grid
+  }
   /**
     *
     * @param size
@@ -85,6 +91,7 @@ case class Grid(grid: List[List[CaseType]]) {
         Ship(size,isSunk = false,fillShipW(size,position))
     }
   }
+
   /**
     * Create a List of ship depending on the config of the battleship
     * And Ask user to place his ships

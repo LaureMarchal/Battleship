@@ -1,7 +1,10 @@
 package helpers
 
-import ship.Position
+import grid.{CaseType, Grid}
+import player.Player
+import ship.{Position, Ship}
 
+import scala.annotation.tailrec
 import scala.io.StdIn.readInt
 import scala.io.StdIn.readLine
 

@@ -1,12 +1,20 @@
 package player
 import grid.Grid
-import ship.Ship
+import ship.{Position, Ship}
 
-case class AI(ships: List[Ship],shipsGrid: Grid, shotsGrid: Grid) extends Player {
+case class AI(shipsGrid: Grid, shotsGrid: Grid, level:Int) extends Player {
 
   override val name: String = "Player AI"
-  override val isActive: Boolean = false
-  override val livePoints: Int = 17
+  override var isActive: Boolean = false
+  override var livePoints: Int = 17
+  override var ships: List[Ship] = Nil
+  def shipsGrid_=(x$1: grid.Grid): Unit = ???
+  def shotsGrid_=(x$1: grid.Grid): Unit = ???
+
+
+  override def placeOneShipOnGrid(positions:List[Position],grid:Grid):Grid = ???
+
+  override def placeShipsOnGrid(ships:List[Ship], grid: Grid): Grid = ???
 
   override def notSunkShips(): List[Ship] = ???
 
