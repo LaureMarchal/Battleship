@@ -3,6 +3,7 @@ Battleship.iml
 bin/
 project/target
 target/
+target/.history
 example/
 build
 .classpath

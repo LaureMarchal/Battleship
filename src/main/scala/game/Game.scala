@@ -1,8 +1,32 @@
 package game
 
+import grid.{CaseType, Grid}
 import helpers.Utils._
+import player.{AI, Human, Player}
 
 object Game {
+
+  //ships configuration in battleship
+  val shipsType : List[Int] = List(2)
+  /**
+    *
+    * @return Player
+    */
+  def createPlayer(playerType:Int): Player = {
+    val emptyShipsGrid = Grid(List.fill(10)(List.fill(10)(CaseType.W)))
+    val emptyShotsGrid = Grid(List.fill(10)(List.fill(10)(CaseType.W)))
+    playerType match {
+      case 0 =>
+        val name = getUserNameFromInput()
+        println("You are going to place your ship now.\n")
+        val hisShips = emptyShipsGrid.placeShips(shipsType)
+        Human(name,hisShips,emptyShipsGrid, emptyShotsGrid)
+      case 1 =>
+        println("You are going to place your ship now.\n")
+        val hisShips = emptyShipsGrid.placeShips(shipsType)
+        AI(hisShips,emptyShipsGrid, emptyShotsGrid)
+    }
+  }
 
   /**
     * Function to prompt the user to choose between multi-player and solo mode
@@ -12,8 +36,10 @@ object Game {
     mode match {
       case 1 =>
         println("You chose to play with another Player")
-        //val player1 = createHumanPlayer()
-        //val player2 = createHumanPlayer()
+        val player1 = createPlayer(0)
+        println(player1.ships)
+        //println("And now the next player")
+        //val player2 = createPlayer(0)
       case 2 =>
         println("You chose to play against the Easy AI")
       //val player1 = createHumanPlayer()
