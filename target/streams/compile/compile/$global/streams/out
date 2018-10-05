@@ -1,0 +1,4 @@
+[0m[[0m[31merror[0m] [0m[0m/home/nena/git/Battleship/src/main/scala/player/Human.scala:5:18: case classes must have a parameter list; try 'case class Human()' or 'case object Human'[0m
+[0m[[0m[31merror[0m] [0m[0mcase class Human extends Player {[0m
+[0m[[0m[31merror[0m] [0m[0m                 ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m

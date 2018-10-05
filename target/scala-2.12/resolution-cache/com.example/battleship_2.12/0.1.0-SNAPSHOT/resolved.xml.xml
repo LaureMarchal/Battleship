@@ -4,7 +4,7 @@
 		module="battleship_2.12"
 		revision="0.1.0-SNAPSHOT"
 		status="integration"
-		publication="20181002124140"
+		publication="20181005140311"
 	>
 		<description>
 		Battleship
