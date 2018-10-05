@@ -1,6 +1,5 @@
 package helpers
 
-import grid.{CaseType, Grid}
 import player.Player
 import ship.{Position, Ship}
 

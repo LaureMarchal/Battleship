@@ -1,18 +1,97 @@
 package grid
 
 import grid.CaseType.CaseType
+
+import scala.collection.immutable.List
+import scala.annotation.tailrec
 import helpers.Utils.getPositionForShipPlacing
 import ship.{Position, Ship}
 
 case class Grid(grid: List[List[CaseType]]) {
 
 
-  def updateCaseOnGrid(grid: Grid, caseType: CaseType, position: Position):Grid = {
-    var gridCopy = grid.copy()
-    println(gridCopy.grid)
-    grid
-  }
+  // Checking For Placing
+
   /**
+    * Check if a ship is not already on the position
+    * @param position
+    * @return Bool
+    */
+  def isValidPositionForShip(position: Position): Boolean = {
+    grid(position.x,position.y) match {
+      case CaseType.W =>
+        if (position.isValidPosition()) true
+        else false
+      case _ => false
+    }
+  }
+
+  /**
+    * check if a ship can be placed on those positions
+    * @param ship
+    * @return
+    */
+  def isValidPlaceForShip(ship: Ship): Boolean = {
+    @tailrec
+    def areAllPositionsValid(positions: List[Position]): Boolean = {
+      if (positions.isEmpty)
+        true
+      else
+      if (!isValidPositionForShip(positions.head))
+        false
+      else
+        areAllPositionsValid(positions.tail)
+    }
+    areAllPositionsValid(ship.positions)
+  }
+
+  // Placing on grid
+
+  /**
+    * set a case of the grid
+    * @param posX
+    * @param posY
+    * @param mark
+    * @return grid
+    */
+  def setCase(posX: Int, posY: Int, mark: CaseType): Grid = {
+    val myGrid = grid
+    val lineToUpdate = myGrid(posX).updated(posY,mark)
+    val newGrid = myGrid.updated(posX,lineToUpdate)
+    val changedGrid : Grid = copy(grid = newGrid)
+    changedGrid
+  }
+
+  /**
+    * place One ship at a time
+    * @param ship
+    * @param grid
+    * @return
+    */
+  def placeOneShip(ship:Ship, grid: List[List[CaseType]]):Grid = {
+    @tailrec
+    def setPositionOnGrid(positions: List[Position], changedGrid: List[List[CaseType]]): Grid = {
+      if (positions.isEmpty)
+        copy(grid = changedGrid)
+      else {
+        val currentPos = positions.head
+        val newGrid = setCase(currentPos.x, currentPos.y, CaseType.S)
+        setPositionOnGrid(positions.tail, newGrid.grid)
+      }
+    }
+    setPositionOnGrid(ship.positions,grid)
+  }
+
+
+  //Display on command line
+
+  def displayGrid(grid: Grid): Unit = {
+    
+  }
+
+  // Useless
+
+    /**
     *
     * @param size
     * @param position
@@ -82,13 +161,13 @@ case class Grid(grid: List[List[CaseType]]) {
   def placeShip(size:Int, position: Position, direction: String): Ship = {
     direction match {
       case "N" =>
-        Ship(size,isSunk = false,fillShipN(size,position))
+        Ship(size,isSunk = false, direction,fillShipN(size,position))
       case "S" =>
-        Ship(size,isSunk = false,fillShipS(size,position))
+        Ship(size,isSunk = false, direction,fillShipS(size,position))
       case "E" =>
-        Ship(size,isSunk = false,fillShipE(size,position))
+        Ship(size,isSunk = false,direction,fillShipE(size,position))
       case "W" =>
-        Ship(size,isSunk = false,fillShipW(size,position))
+        Ship(size,isSunk = false,direction,fillShipW(size,position))
     }
   }
 

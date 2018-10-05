@@ -16,18 +16,19 @@ object Game {
     * @return Player
     */
   def createPlayer(playerType:Int): Player = {
+    val livePoints = shipsType.sum
     val emptyShipsGrid = Grid(List.fill(10)(List.fill(10)(CaseType.W)))
     val emptyShotsGrid = Grid(List.fill(10)(List.fill(10)(CaseType.W)))
     playerType match {
       case 0 =>
         val name = getUserNameFromInput()
-        Human(name,emptyShipsGrid, emptyShotsGrid)
+        Human(name,emptyShipsGrid, emptyShotsGrid, livePoints)
       case 1 =>
-        AI(emptyShipsGrid, emptyShotsGrid,1)
+        AI(emptyShipsGrid, emptyShotsGrid,1, livePoints)
       case 2 =>
-        AI(emptyShipsGrid, emptyShotsGrid,2)
+        AI(emptyShipsGrid, emptyShotsGrid,2, livePoints)
       case 3 =>
-        AI(emptyShipsGrid, emptyShotsGrid,3)
+        AI(emptyShipsGrid, emptyShotsGrid,3, livePoints)
     }
   }
 
