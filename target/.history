@@ -1,0 +1,14 @@
+exit
+set ThisBuild / scalaVersion := "2.12.6"
+compile
+exit
+set ThisBuild / scalaVersion := "2.12.6"
+session save
+scalaVersion
+exit
+compile
+run
+test
+rum
+run
+exit
