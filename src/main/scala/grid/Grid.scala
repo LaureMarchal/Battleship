@@ -20,8 +20,6 @@ case class Grid(grid: List[List[CaseType]]) {
   def isValidPositionForShip(position: Position): Boolean = {
     grid(position.x,position.y) match {
       case CaseType.W =>
-        if (position.isValidPosition()) true
-        else false
       case _ => false
     }
   }
@@ -86,11 +84,11 @@ case class Grid(grid: List[List[CaseType]]) {
   //Display on command line
 
   def displayGrid(grid: Grid): Unit = {
-    
+
   }
 
   // Useless
-
+/*
     /**
     *
     * @param size
@@ -161,13 +159,13 @@ case class Grid(grid: List[List[CaseType]]) {
   def placeShip(size:Int, position: Position, direction: String): Ship = {
     direction match {
       case "N" =>
-        Ship(size,isSunk = false, direction,fillShipN(size,position))
+        Ship(, size, isSunk = false, direction, fillShipN(size,position))
       case "S" =>
-        Ship(size,isSunk = false, direction,fillShipS(size,position))
+        Ship(, size, isSunk = false, direction, fillShipS(size,position))
       case "E" =>
-        Ship(size,isSunk = false,direction,fillShipE(size,position))
+        Ship(, size, isSunk = false, direction, fillShipE(size,position))
       case "W" =>
-        Ship(size,isSunk = false,direction,fillShipW(size,position))
+        Ship(, size, isSunk = false, direction, fillShipW(size,position))
     }
   }
 
@@ -186,5 +184,5 @@ case class Grid(grid: List[List[CaseType]]) {
       val (pos,dir) = getPositionForShipPlacing(size)
       placeShip(size,pos,dir)::placeShips(shipsType.tail)
     }
-  }
+  }*/
 }

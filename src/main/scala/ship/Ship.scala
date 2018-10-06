@@ -1,5 +1,6 @@
 package ship
 
-case class Ship(size:Int,isSunk:Boolean, direction: String, positions:List[Position]) {
+case class Ship(name: String, size: Int, direction: String, positions: List[Position]) {
 
+  def isSunk(): Boolean = if (size == 0) true else false
 }

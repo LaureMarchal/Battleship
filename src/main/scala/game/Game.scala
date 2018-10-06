@@ -1,6 +1,7 @@
 package game
 
 import grid.{CaseType, Grid}
+import helpers.BoatType
 import helpers.Utils._
 import player.{AI, Human, Player}
 
@@ -9,14 +10,14 @@ import scala.annotation.tailrec
 object Game {
 
   //ships configuration in battleship
-  //val shipsType : List[Int] = List(5,4,3,3,2)
-  val shipsType : List[Int] = List(3,2)
+  //val shipsType : List[BoatType] = getBoatConfiguration()
+  val shipsType : List[BoatType] = List(BoatType("Submarine",3),BoatType("Destroyer",2))
   /**
     *
     * @return Player
     */
   def createPlayer(playerType:Int): Player = {
-    val livePoints = shipsType.sum
+    val livePoints = getLivePoints(shipsType)
     val emptyShipsGrid = Grid(List.fill(10)(List.fill(10)(CaseType.W)))
     val emptyShotsGrid = Grid(List.fill(10)(List.fill(10)(CaseType.W)))
     playerType match {
@@ -76,8 +77,8 @@ object Game {
         g
       else
         println("You are going to place your ships now.\n")
-        g.getActivePlayer.ships = g.getActivePlayer.shipsGrid.placeShips(shipsType)
-        g.getActivePlayer.shipsGrid = g.getActivePlayer.placeShipsOnGrid(g.getActivePlayer.ships, g.getActivePlayer.shipsGrid)
+        //g.getActivePlayer.placeShips()
+        //g.getActivePlayer.shipsGrid = g.getActivePlayer.placeShipsOnGrid(g.getActivePlayer.ships, g.getActivePlayer.shipsGrid)
         placeShipsRec(g.switchPlayers, nbPlayers - 1)
     }
     placeShipsRec(g,2)

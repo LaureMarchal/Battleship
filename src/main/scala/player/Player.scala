@@ -1,16 +1,17 @@
 package player
 
 import grid.Grid
-import ship.Ship
+import ship.{Position, Ship}
 
 trait Player {
   val name: String
-  var isActive: Boolean
-  var livePoints: Int
-  var ships: List[Ship]
-  var shipsGrid: Grid
-  var shotsGrid: Grid
+  val livePoints: Int
+  val ships: List[Ship]
+  val shipsGrid: Grid
+  val shotsGrid: Grid
 
+  def createShips(): List[Ship]
+  def placeShips(positions:List[Position], ships:List[Ship]): List[Ship]
   def notSunkShips(): List[Ship]
   def shoot(): Int
 
