@@ -1,8 +1,5 @@
 package ship
 
-import helpers.BoatType
-import helpers.Utils.{getDirectionShipFromInput, getPositionsShipFromInput, isValidPositionList}
-
 import scala.collection.immutable.List
 
 case class Ship(name: String, size: Int, direction: String, positions: List[Position]) {

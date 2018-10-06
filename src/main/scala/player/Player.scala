@@ -6,10 +6,10 @@ import ship.{Position, Ship}
 
 trait Player {
   val name: String
-  val livePoints: Int
+  var livePoints: Int
   var ships: List[Ship]
-  val shipsGrid: Grid
-  val shotsGrid: Grid
+  var shipsGrid: Grid
+  var shotsGrid: Grid
 
   def createShips(): List[Ship]
   //def placeShips(positions:List[Position], ships:List[Ship]): List[Ship]

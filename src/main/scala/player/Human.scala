@@ -7,7 +7,7 @@ import ship.{Position, Ship}
 
 import scala.annotation.tailrec
 
-case class Human(name:String,shipsGrid: Grid, shotsGrid: Grid, livePoints: Int) extends Player {
+case class Human(name:String, var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int) extends Player {
 
   override var ships: List[Ship] = Nil
 
@@ -16,8 +16,13 @@ case class Human(name:String,shipsGrid: Grid, shotsGrid: Grid, livePoints: Int) 
       Nil
     else {
       val newShip = getPositionForShipPlacing(shipsType.head)
-      println(s"ship : $newShip")
-      newShip::placeShips(shipsType.tail)
+      if (!shipsGrid.isValidPlaceForShip(newShip)) {
+        placeShips(shipsType)
+      } else {
+        val newGrid = shipsGrid.placeOneShip(newShip,shipsGrid.grid)
+        println(s"grid : $newGrid")
+        newShip::placeShips(shipsType.tail)
+      }
     }
   }
 

@@ -4,12 +4,11 @@ import grid.CaseType.CaseType
 
 import scala.collection.immutable.List
 import scala.annotation.tailrec
-import helpers.Utils.getPositionForShipPlacing
 import ship.{Position, Ship}
 
 case class Grid(grid: List[List[CaseType]]) {
 
-/*
+
   // Checking For Placing
 
   /**
@@ -18,8 +17,8 @@ case class Grid(grid: List[List[CaseType]]) {
     * @return Bool
     */
   def isValidPositionForShip(position: Position): Boolean = {
-    grid(position.x,position.y) match {
-      case CaseType.W =>
+    grid(position.x)(position.y) match {
+      case CaseType.W => true
       case _ => false
     }
   }
@@ -73,8 +72,12 @@ case class Grid(grid: List[List[CaseType]]) {
         copy(grid = changedGrid)
       else {
         val currentPos = positions.head
-        val newGrid = setCase(currentPos.x, currentPos.y, CaseType.S)
-        setPositionOnGrid(positions.tail, newGrid.grid)
+        //val newGrid = Grid(changedGrid.updated(currentPos.x, changedGrid(currentPos.x).updated(currentPos.y, currentPos)))
+        //val newGrid = setCase(currentPos.x, currentPos.y, CaseType.S)
+        //useless => find another way//copy(grid = newGrid.grid)
+        println("grid after one position placed :\n")
+        println(grid)
+        //setPositionOnGrid(positions.tail, newGrid.grid)
       }
     }
     setPositionOnGrid(ship.positions,grid)
@@ -86,7 +89,7 @@ case class Grid(grid: List[List[CaseType]]) {
   def displayGrid(grid: Grid): Unit = {
 
   }
-*/
+
   // Useless
 /*
     /**

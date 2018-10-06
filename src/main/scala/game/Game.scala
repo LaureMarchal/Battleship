@@ -11,7 +11,7 @@ object Game {
 
   //ships configuration in battleship
   //val shipsType : List[BoatType] = getBoatConfiguration()
-  val shipsType : List[BoatType] = List(BoatType("Submarine",3),BoatType("Destroyer",2))
+  val shipsType : List[BoatType] = List(BoatType("Destroyer",2))
   /**
     *
     * @return Player
@@ -81,7 +81,6 @@ object Game {
         println("You are going to place your ships.\n")
         val listShips = g.getActivePlayer.placeShips(shipsType)
         g.getActivePlayer.ships = listShips
-        //g.getActivePlayer.shipsGrid = g.getActivePlayer.placeShipsOnGrid(g.getActivePlayer.ships, g.getActivePlayer.shipsGrid)
         placeShipsRec(g.switchPlayers, nbPlayers - 1)
       }
     }

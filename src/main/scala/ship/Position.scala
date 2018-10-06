@@ -7,7 +7,7 @@ case class Position(x:Int,y:Int) {
     * @return
     */
   def isValidPosition():Boolean = {
-    if ((x < 1 || x > 10) && (y < 1 || y > 10)) false
+    if ((x < 0 || x > 9) && (y < 0 || y > 9)) false
     else true
   }
 }

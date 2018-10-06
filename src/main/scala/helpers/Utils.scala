@@ -77,7 +77,7 @@ object Utils {
         val inputX = inputArray(0).toUpperCase().toCharArray.head.toInt
         val inputPosX = inputX - mod + 1
         val inputPosY : Int = inputArray(1).toInt
-        val position = Position(inputPosX,inputPosY)
+        val position = Position(inputPosX - 1,inputPosY - 1)
         if (!position.isValidPosition()) {
           println("Not a valid position (out of the grid). Please Try again")
           getPositionsShipFromInput(size)
@@ -102,11 +102,12 @@ object Utils {
     */
   def getDirectionShipFromInput(boatType: BoatType): String = {
     val input = readLine(s"In which direction do you want your ${boatType.name} to go : (Please Answer by N (NORTH), S (SOUTH), E (EAST) or W (WEST)\nDirection : ")
-    input match {
-      case "N" => input
-      case "S" => input
-      case "E" => input
-      case "W" => input
+    val inputUp = input.toUpperCase
+    inputUp match {
+      case "N" => inputUp
+      case "S" => inputUp
+      case "E" => inputUp
+      case "W" => inputUp
       case _ =>
         println("This is not a valid direction. Please Try again\n")
         getDirectionShipFromInput(boatType)
@@ -129,25 +130,25 @@ object Utils {
       direction match {
         case "N" =>
           val diff = Math.abs(pos1.y - pos2.y)
-          if (pos1.x != pos2.x && diff != 1)
+          if (pos1.x != pos2.x || diff != 1)
             false
           else
             isValidPositionList(positionsChanged, direction)
         case "S" =>
           val diff = Math.abs(pos1.y - pos2.y)
-          if (pos1.x != pos2.x && diff != 1)
+          if (pos1.x != pos2.x || diff != 1)
             false
           else
             isValidPositionList(positionsChanged, direction)
         case "E" =>
           val diff = Math.abs(pos1.x - pos2.x)
-          if (pos1.y != pos2.y && diff != 1)
+          if (pos1.y != pos2.y || diff != 1)
             false
           else
             isValidPositionList(positionsChanged, direction)
         case "W" =>
           val diff = Math.abs(pos1.x - pos2.x)
-          if (pos1.y != pos2.y && diff != 1)
+          if (pos1.y != pos2.y || diff != 1)
             false
           else
             isValidPositionList(positionsChanged, direction)
@@ -165,7 +166,6 @@ object Utils {
     val positionsInput = getPositionsShipFromInput(boatType.size)
     println(positionsInput)
     if (isValidPositionList(positionsInput,validDirection)) {
-      println("create the ship")
       Ship(boatType.name,boatType.size,validDirection,positionsInput)
     } else {
       println("The positions for the ship are not in the right configuration, please try again")

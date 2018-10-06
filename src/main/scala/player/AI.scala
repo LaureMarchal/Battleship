@@ -3,7 +3,7 @@ import grid.Grid
 import helpers.BoatType
 import ship.{Position, Ship}
 
-case class AI(shipsGrid: Grid, shotsGrid: Grid, level:Int, livePoints: Int) extends Player {
+case class AI(var shipsGrid: Grid, var shotsGrid: Grid, level:Int, var livePoints: Int) extends Player {
 
   override val name: String = "Player AI"
   override var ships: List[Ship] = Nil
