@@ -75,11 +75,15 @@ object Game {
     def placeShipsRec(g:GameState, nbPlayers: Int): GameState = {
       if (nbPlayers == 0)
         g
-      else
-        println("You are going to place your ships now.\n")
-        //g.getActivePlayer.placeShips()
+      else {
+        val name = g.getActivePlayer.name
+        println(s"Player $name. It's your turn !\n")
+        println("You are going to place your ships.\n")
+        val listShips = g.getActivePlayer.placeShips(shipsType)
+        g.getActivePlayer.ships = listShips
         //g.getActivePlayer.shipsGrid = g.getActivePlayer.placeShipsOnGrid(g.getActivePlayer.ships, g.getActivePlayer.shipsGrid)
         placeShipsRec(g.switchPlayers, nbPlayers - 1)
+      }
     }
     placeShipsRec(g,2)
   }

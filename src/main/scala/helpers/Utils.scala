@@ -1,13 +1,19 @@
 package helpers
 
+import java.lang.Exception
+
 import player.Player
 import ship.{Position, Ship}
+
 import scala.collection.immutable.List
 import scala.annotation.tailrec
 import scala.io.StdIn.readInt
 import scala.io.StdIn.readLine
+import scala.util.control.Exception
 
 object Utils {
+
+  val mod : Int = 'A'.toInt
 
   /**
     * get a list of the boat to place on grid
@@ -47,30 +53,53 @@ object Utils {
     }
   }
 
+  /**
+    * ask the name of the player
+    * @return
+    */
   def getUserNameFromInput(): String = {
     val userNameInput = readLine("Enter your player name, please : ")
     userNameInput
   }
 
+  /**
+    * Ask for positions for a ship
+    * @param size
+    * @return
+    */
   def getPositionsShipFromInput(size:Int): List[Position] = {
     if (size == 0)
       Nil
-    else
-      println("Next Coordinates (Do not forget each position must be next to each other)")
-      val inputPos = readLine("Enter position : ")
-      val inputArray = inputPos.split("")
-      val inputPosX : Int = inputArray(0).toUpperCase().toInt //Verif
-      val inputPosY : Int = inputArray(1).toInt
-      val position = Position(inputPosX,inputPosY)
-      if (!position.isValidPosition()) {
-        println("Not a valid position (out of the grid). Please Try again")
-        getPositionsShipFromInput(size)
+    else {
+      val inputPos = readLine("Enter position (must be between 1 and 10 or A and J => example : A 9 ) : ")
+      try {
+        val inputArray = inputPos.split(" ")
+        val inputX = inputArray(0).toUpperCase().toCharArray.head.toInt
+        val inputPosX = inputX - mod + 1
+        val inputPosY : Int = inputArray(1).toInt
+        val position = Position(inputPosX,inputPosY)
+        if (!position.isValidPosition()) {
+          println("Not a valid position (out of the grid). Please Try again")
+          getPositionsShipFromInput(size)
+        } else {
+          println(s"x : $inputPosX, y : $inputPosY")
+          val newSize = size - 1
+          println(s"$newSize positions left")
+          getPositionsShipFromInput(newSize):+position
+        }
+      } catch {
+        case e: Exception =>
+          println("A problem occurred. Make sure you wrote the position like the example.")
+          getPositionsShipFromInput(size)
       }
-      else {
-        position::getPositionsShipFromInput(size - 1)
-      }
+    }
   }
 
+  /**
+    * Ask the direction of the ship
+    * @param boatType
+    * @return
+    */
   def getDirectionShipFromInput(boatType: BoatType): String = {
     val input = readLine(s"In which direction do you want your ${boatType.name} to go : (Please Answer by N (NORTH), S (SOUTH), E (EAST) or W (WEST)\nDirection : ")
     input match {
@@ -84,11 +113,64 @@ object Utils {
     }
   }
 
-  def getPositionForShipPlacing(boatType: BoatType): (Position,String) = {
-    println(s"Where do you want to place your ${boatType.name} of size , ${boatType.size} :")
-    val validDir = getDirectionShipFromInput(boatType)
-    val validPos = getPositionsShipFromInput(boatType.size)
+  /**
+    * Check if a list of positions is next to each other
+    * @param positions
+    * @param direction
+    * @return
+    */
+  def isValidPositionList(positions :List[Position], direction : String): Boolean = {
+    if (positions.size == 1)
+      true
+    else {
+      val pos1 = positions.head
+      val positionsChanged = positions.tail
+      val pos2 = positionsChanged.head
+      direction match {
+        case "N" =>
+          val diff = Math.abs(pos1.y - pos2.y)
+          if (pos1.x != pos2.x && diff != 1)
+            false
+          else
+            isValidPositionList(positionsChanged, direction)
+        case "S" =>
+          val diff = Math.abs(pos1.y - pos2.y)
+          if (pos1.x != pos2.x && diff != 1)
+            false
+          else
+            isValidPositionList(positionsChanged, direction)
+        case "E" =>
+          val diff = Math.abs(pos1.x - pos2.x)
+          if (pos1.y != pos2.y && diff != 1)
+            false
+          else
+            isValidPositionList(positionsChanged, direction)
+        case "W" =>
+          val diff = Math.abs(pos1.x - pos2.x)
+          if (pos1.y != pos2.y && diff != 1)
+            false
+          else
+            isValidPositionList(positionsChanged, direction)
+      }
+    }
+  }
 
+  /**
+    * Ask to place the ships
+    * @param boatType
+    */
+  def getPositionForShipPlacing(boatType: BoatType): Ship = {
+    println(s"Place your ${boatType.name} of size ${boatType.size} :")
+    val validDirection = getDirectionShipFromInput(boatType)
+    val positionsInput = getPositionsShipFromInput(boatType.size)
+    println(positionsInput)
+    if (isValidPositionList(positionsInput,validDirection)) {
+      println("create the ship")
+      Ship(boatType.name,boatType.size,validDirection,positionsInput)
+    } else {
+      println("The positions for the ship are not in the right configuration, please try again")
+      getPositionForShipPlacing(boatType)
+    }
   }
 
 }

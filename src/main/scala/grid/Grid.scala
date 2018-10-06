@@ -9,7 +9,7 @@ import ship.{Position, Ship}
 
 case class Grid(grid: List[List[CaseType]]) {
 
-
+/*
   // Checking For Placing
 
   /**
@@ -86,7 +86,7 @@ case class Grid(grid: List[List[CaseType]]) {
   def displayGrid(grid: Grid): Unit = {
 
   }
-
+*/
   // Useless
 /*
     /**
