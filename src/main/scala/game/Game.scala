@@ -11,7 +11,9 @@ object Game {
 
   //ships configuration in battleship
   //val shipsType : List[BoatType] = getBoatConfiguration()
+  //val shipsType : List[BoatType] = List(BoatType("Submarine",3),BoatType("Destroyer",2))
   val shipsType : List[BoatType] = List(BoatType("Destroyer",2))
+
   /**
     *
     * @return Player
@@ -42,7 +44,6 @@ object Game {
       case 1 =>
         println("You chose to play with another Player")
         val player1 = createPlayer(0)
-        println(player1.ships)
         println("And now the next player")
         val player2 = createPlayer(0)
         GameState(player1,player2)
@@ -81,6 +82,8 @@ object Game {
         println("You are going to place your ships.\n")
         val listShips = g.getActivePlayer.placeShips(shipsType)
         g.getActivePlayer.ships = listShips
+        // To display the grid properly to the user
+        g.getActivePlayer.shipsGrid.displayGrid()
         placeShipsRec(g.switchPlayers, nbPlayers - 1)
       }
     }
@@ -90,16 +93,45 @@ object Game {
   /**
     * GameLoop
     */
-  def gameLoop(g:GameState): Unit = {
-    println("game in construction")
-    //Choose first player
-    //Show grid of boats
-    //Prompt player for target
-    //show grid of shots
-    //shoot target
-    //If player win
-    //end game
-    //else
-    //switch player
+  def gameLoop(g:GameState): GameState = {
+    if (g.getActivePlayer.livePoints == 0)
+      g
+    else {
+      val name = g.getActivePlayer.name
+      println(s"Player $name. It's your turn !\n")
+      // Show shipsGrid
+      println("Your ships Grid : ")
+      g.getActivePlayer.shipsGrid.displayGrid()
+      // Show Shots Grid
+      println("Your shots Grid : ")
+      g.getActivePlayer.shotsGrid.displayGrid()
+      //Ask for target
+      val target = getTargetFromInput()
+      // Shoot
+      val shotType = g.getActivePlayer.shoot(target,g.getOpponent)
+      // return result of shot
+      shotType match {
+        case CaseType.Sunk => displaySunk()
+        case CaseType.H =>
+          displayHit()
+          println("ships opp : ")
+          println(g.getOpponent.ships)
+        case CaseType.M => displayMissed()
+      }
+      // return shotsGrid
+      println("Your shots Grid after shot : ")
+      g.getActivePlayer.shotsGrid.displayGrid()
+      //Switch Players
+      gameLoop(g.switchPlayers)
+    }
+  }
+
+  def rematch() : Boolean = {
+    val response = askForRematch()
+    response match {
+      case "replay" => true
+      case "quit" => false
+      case _ => rematch()
+    }
   }
 }
