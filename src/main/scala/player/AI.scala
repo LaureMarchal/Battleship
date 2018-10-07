@@ -1,7 +1,10 @@
 package player
 
+import scala.util.Random
+
 import grid.Grid
 import ship.{BoatType, Position, Ship}
+import helpers.Helper._
 
 /**
   * AI player
@@ -38,6 +41,10 @@ case class AI(var shipsGrid: Grid, var shotsGrid: Grid, level:Int, var livePoint
     }
   }
 
+  override def chooseTarget() : Position = {
+    getRandomTarget()
+  }
+
   /**
     * Generate the place of a ship depending on AI level
     * @param shipType list of boat type (name,size) to place
@@ -45,9 +52,28 @@ case class AI(var shipsGrid: Grid, var shotsGrid: Grid, level:Int, var livePoint
     * @return
     */
   def generateShipPlacingAI(shipType: BoatType,level: Int) : (String,List[Position]) = {
-    val direction = "S"
-    val pos = Position(0,0)
-    val positions = List.fill(shipType.size)(pos)
+    val random = new Random()
+    var direction = ""
+    var posFirst = Position(0,0)
+    val dirRandom = random.nextInt(4)
+    val posRandom = random.nextInt(10)
+    dirRandom match {
+      case 0 =>
+        direction = "N"
+        posFirst = Position(posRandom,9)
+      case 1 =>
+        direction = "S"
+        posFirst = Position(posRandom,0)
+      case 2 =>
+        direction = "E"
+        posFirst = Position(0,posRandom)
+      case 3 =>
+        direction = "W"
+        posFirst = Position(9,posRandom)
+      case _ => generateShipPlacingAI(shipType,level)
+    }
+    val positions = List.fill(shipType.size)(posFirst)
     (direction,positions)
   }
+
 }

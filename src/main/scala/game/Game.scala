@@ -83,13 +83,19 @@ object Game {
       if (nbPlayers == 0)
         g
       else {
-        val name = g.getActivePlayer.name
-        println(s"Player $name. It's your turn !\n")
-        println("You are going to place your ships.\n")
-        val listShips = g.getActivePlayer.placeShips(shipsType)
-        g.getActivePlayer.ships = listShips
-        // To display the grid properly to the user
-        g.getActivePlayer.shipsGrid.displayGrid()
+        if (g.getActivePlayer.getClass.isInstance(Human)) {
+          val name = g.getActivePlayer.name
+          println(s"Player $name. It's your turn !\n")
+          println("You are going to place your ships.\n")
+          val listShips = g.getActivePlayer.placeShips(shipsType)
+          g.getActivePlayer.ships = listShips
+          // To display the grid properly to the user
+          g.getActivePlayer.shipsGrid.displayGrid()
+        } else {
+          println("Please wait. The AI is placing its ships.\n")
+          val listShips = g.getActivePlayer.placeShips(shipsType)
+          g.getActivePlayer.ships = listShips
+        }
         placeShipsRec(g.switchPlayers, nbPlayers - 1)
       }
     }
@@ -105,29 +111,29 @@ object Game {
     if (g.getActivePlayer.livePoints == 0)
       g
     else {
-      val name = g.getActivePlayer.name
-      println(s"\nPlayer $name. It's your turn !\n")
-      // Show shipsGrid
-      println("Your ships Grid :\n")
-      g.getActivePlayer.shipsGrid.displayGrid()
-      // Show Shots Grid
-      println("Your shots Grid :\n")
-      g.getActivePlayer.shotsGrid.displayGrid()
-      //Ask for target
-      val target = getTargetFromInput()
+      if (g.getActivePlayer.getClass.isInstance(Human)) {
+        val name = g.getActivePlayer.name
+        println(s"\nPlayer $name. It's your turn !\n")
+        // Show shipsGrid
+        println("Your ships Grid :\n")
+        g.getActivePlayer.shipsGrid.displayGrid()
+        // Show Shots Grid
+        println("Your shots Grid :\n")
+        g.getActivePlayer.shotsGrid.displayGrid()
+      } else {
+        println(s"\nIt's the AI turn !\n")
+      }
+      // Ask/get target
+      val target = g.getActivePlayer.chooseTarget()
       // Shoot
       val shotResult = g.getActivePlayer.shoot(target,g.getOpponent)
       // return result of shot
       shotResult match {
         case CaseType.Sunk => displaySunk()
-        case CaseType.H =>
-          displayHit()
+        case CaseType.H => displayHit()
         case CaseType.M => displayMissed()
         case CaseType.Tried => displayTried()
       }
-      // return shotsGrid
-      println("Your new shots grid after your shot : ")
-      g.getActivePlayer.shotsGrid.displayGrid()
       //Switch Players
       gameLoop(g.switchPlayers)
     }

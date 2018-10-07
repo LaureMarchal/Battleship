@@ -2,7 +2,7 @@ package player
 
 import grid.Grid
 import helpers.Helper._
-import ship.{BoatType, Ship}
+import ship.{BoatType, Position, Ship}
 
 /**
   * Human player
@@ -36,5 +36,9 @@ case class Human(name:String, var shipsGrid: Grid, var shotsGrid: Grid, var live
         newShip::placeShips(shipsType.tail)
       }
     }
+  }
+
+  override def chooseTarget() : Position = {
+    getTargetFromInput()
   }
 }

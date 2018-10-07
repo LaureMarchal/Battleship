@@ -5,6 +5,7 @@ import ship.{BoatType, Position}
 
 import scala.collection.immutable.List
 import scala.io.StdIn.{readInt, readLine}
+import scala.util.Random
 
 /**
   * Object Helper that contains each function to prompt the user, print on console or specific to battleship game
@@ -36,6 +37,16 @@ object Helper {
       0
     else
       config.head.size + getLivePoints(config.tail)
+  }
+
+  // AI helpers functions
+  /**
+    * get a random target
+    * @return position to shoot
+    */
+  def getRandomTarget(): Position = {
+    val random = new Random()
+    Position(random.nextInt(10),random.nextInt(10))
   }
 
   // Functions to ask user for inputs

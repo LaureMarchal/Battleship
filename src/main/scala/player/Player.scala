@@ -80,4 +80,10 @@ trait Player {
     newShip.isSunk()
   }
 
+  /**
+    * choose or get the target position
+    * @return
+    */
+  def chooseTarget(): Position
+
 }
