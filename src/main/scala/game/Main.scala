@@ -21,11 +21,8 @@ object Main extends App {
     // Ask for replay
     if (rematch()) mainLoop()
   }
-
-  /*
+  
   // Start the game
   println("Hello ! You are going to play a battleship !")
-  mainLoop()*/
-  val emptyShipsGrid = Grid(List.fill(10)(List.fill(10)(CaseType.W)))
-  emptyShipsGrid.displayGrid()
+  mainLoop()
 }
