@@ -15,7 +15,7 @@ case class Ship(name: String, size: Int, direction: String, positions: List[Posi
     * check if a ship has been sunk
     * @return true if size = 0 or else false
     */
-  def isSunk(): Boolean = if (size == 0) true else false
+  def isSunk(): Boolean = size == 0
 
   /**
     * update the positions attribute of ship by removing one position from the list when it is hit
@@ -25,7 +25,7 @@ case class Ship(name: String, size: Int, direction: String, positions: List[Posi
   def setShotShip(target: Position): Ship = {
     val positionsToUpdate = positions
     val newPositions = positionsToUpdate.filter(x => x  != target)
-    val newShip = Ship(name, size - 1, direction, newPositions)
+    val newShip = Ship(name, newPositions.length, direction, newPositions)
     newShip
   }
 

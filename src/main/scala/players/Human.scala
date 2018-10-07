@@ -1,32 +1,51 @@
-package player
+package players
 
 import grid.CaseType.CaseType
 import grid.{CaseType, Grid}
+import helpers.Helper._
 import ship.{BoatType, Position, Ship}
 
 /**
-  * Player behavior
+  * Human player
+  * @param name string to differenciate the players on console
+  * @param shipsGrid grid for ships of the player
+  * @param shotsGrid grid for shots of the player
+  * @param livePoints int to know when a player lost
   */
-trait Player {
+case class Human(name:String, var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int) extends Player {
 
-  val name: String
-  var livePoints: Int
-  var ships: List[Ship]
-  var shipsGrid: Grid
-  var shotsGrid: Grid
+  override var ships: List[Ship] = Nil
 
   /**
-    * Place the ships of a player
-    * @param shipsType list of boat type (name,size) that define a ship to play with
+    * Place the ships of a human player
+    * @param shipsType list of boat type (name,size) to place
     * @return
     */
-  def placeShips(shipsType: List[BoatType]): List[Ship]
+  override def placeShips(shipsType: List[BoatType]): List[Ship] = {
+    if (shipsType.isEmpty)
+      Nil
+    else {
+      val (direction,positions) = getPositionForShipPlacing(shipsType.head)
+      if (!shipsGrid.isValidPlaceForShip(positions)) {
+        placeShips(shipsType)
+      } else {
+        // create the ship
+        val newShip = Ship(shipsType.head.name,shipsType.head.size,direction,positions)
+        //place it on the grid
+        shipsGrid = shipsGrid.placeOneShip(newShip,shipsGrid.grid)
+        //add to player and continue placing ships
+        newShip::placeShips(shipsType.tail)
+      }
+    }
+  }
 
   /**
-    * Return the ships that are not sunk
-    * @return list of not sunk ships
+    * choose or get the target position
+    * @return
     */
-  def notSunkShips(): List[Ship] = ships.filterNot(x => x.size == 0)
+  override def chooseTarget() : Position = {
+    getTargetFromInput()
+  }
 
   /**
     * Shoot a target
@@ -34,7 +53,7 @@ trait Player {
     * @param opponent the player who is attacked
     * @return the CaseType : result of the shot
     */
-  def shoot(target: Position,opponent:Player): CaseType = {
+  override def shoot(target: Position,opponent:Player): CaseType = {
     val opponentGrid = opponent.shipsGrid.grid
     val caseAttacked = opponentGrid(target.x)(target.y)
     caseAttacked match {
@@ -64,26 +83,4 @@ trait Player {
         CaseType.Tried
     }
   }
-
-  /**
-    * update the ships of the player if the target was a ship position
-    * @param target position hit
-    * @return true if the ship is sunk or else false
-    */
-  def updateShips(target:Position) : Boolean = {
-    val shipsToUpdate = ships
-    val shipToUpdate = ships.find(s => s.positions.contains(target)).get
-    val i = shipsToUpdate.indexOf(shipToUpdate)
-    val newShip = shipToUpdate.setShotShip(target)
-    val newShips = shipsToUpdate.updated(i,newShip)
-    ships = newShips
-    newShip.isSunk()
-  }
-
-  /**
-    * choose or get the target position
-    * @return
-    */
-  def chooseTarget(): Position
-
 }

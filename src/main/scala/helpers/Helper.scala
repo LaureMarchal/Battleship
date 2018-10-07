@@ -49,6 +49,21 @@ object Helper {
     Position(random.nextInt(10),random.nextInt(10))
   }
 
+  /**
+    * get a random direction to place a ship
+    * @return
+    */
+  def getRandomDirectionStart(): (String,Position) = {
+    val random = new Random()
+    val dir = random.nextInt(4)
+    dir match {
+      case 0 => ("N",Position(0,9))
+      case 1 => ("S",Position(0,0))
+      case 2 => ("E",Position(0,0))
+      case 3 => ("W",Position(9,0))
+    }
+  }
+
   // Functions to ask user for inputs
 
   /**
@@ -57,7 +72,7 @@ object Helper {
     */
   def getGameModeFromUserInput(): Int = {
     try {
-      println("Press the number that corresponds to the desired play mode :\n1 - Multi-player\n2 - VS Easy AI\n3 - VS Intermediate AI\n4 - VS Difficult AI\nmode : ")
+      println("Press the number that corresponds to the desired play mode :\n1 - Multi-player\n2 - VS Easy AI\n3 - VS Medium AI\n4 - VS Difficult AI\nmode : ")
       val userInput = readInt()
       userInput
     }

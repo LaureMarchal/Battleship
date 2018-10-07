@@ -1,6 +1,6 @@
 package game
 
-import player.Player
+import players.Player
 
 /**
   * GameState contains the 2 players and define the player who must play and the other

@@ -11,3 +11,5 @@ build
 .DS_Store
 *.class
 src/main/main.iml
+BattleshipDiagram.uml
+

@@ -2,7 +2,8 @@ package game
 
 import grid.{CaseType, Grid}
 import helpers.Helper._
-import player.{AI, Human, Player}
+import players.AIs.{DifficultAI, EasyAI, MediumAI}
+import players.{Human, Player}
 import ship.BoatType
 
 import scala.annotation.tailrec
@@ -30,11 +31,11 @@ object Game {
         val name = getUserNameFromInput()
         Human(name,emptyShipsGrid, emptyShotsGrid, livePoints)
       case 1 =>
-        AI(emptyShipsGrid, emptyShotsGrid,1, livePoints)
+        EasyAI(emptyShipsGrid, emptyShotsGrid, livePoints)
       case 2 =>
-        AI(emptyShipsGrid, emptyShotsGrid,2, livePoints)
+        MediumAI(emptyShipsGrid, emptyShotsGrid, livePoints)
       case 3 =>
-        AI(emptyShipsGrid, emptyShotsGrid,3, livePoints)
+        DifficultAI(emptyShipsGrid, emptyShotsGrid, livePoints)
     }
   }
 
@@ -57,7 +58,7 @@ object Game {
         val player2 = createPlayer(1)
         GameState(player1,player2)
       case 3 =>
-        println("You chose to play against the Intermediate AI")
+        println("You chose to play against the Medium AI")
         val player1 = createPlayer(0)
         val player2 = createPlayer(2)
         GameState(player1,player2)
