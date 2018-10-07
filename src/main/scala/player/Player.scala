@@ -5,7 +5,11 @@ import grid.{CaseType, Grid}
 import helpers.BoatType
 import ship.{Position, Ship}
 
+/**
+  * Player behavior
+  */
 trait Player {
+
   val name: String
   var livePoints: Int
   var ships: List[Ship]
@@ -13,27 +17,28 @@ trait Player {
   var shotsGrid: Grid
 
   /**
-    *
-    * @param shipsType
+    * Place the ships of a player
+    * @param shipsType list of boat type (name,size) that define a ship to play with
     * @return
     */
   def placeShips(shipsType: List[BoatType]): List[Ship]
 
   /**
-    *
-    * @return
+    * Return the ships that are not sunk
+    * @return list of not sunk ships
     */
-  def notSunkShips(): List[Ship] = ships
+  def notSunkShips(): List[Ship] = ships.filterNot(x => x.size == 0)
 
   /**
-    *
-    * @param target
-    * @param opponent
-    * @return
+    * Shoot a target
+    * @param target position to shoot
+    * @param opponent the player who is attacked
+    * @return the CaseType : result of the shot
     */
   def shoot(target: Position,opponent:Player): CaseType = {
     val opponentGrid = opponent.shipsGrid.grid
-    opponentGrid(target.x)(target.y) match {
+    val caseAttacked = opponentGrid(target.x)(target.y)
+    caseAttacked match {
       case CaseType.S =>
         val hit = CaseType.H
         // update player shotsgrid
@@ -56,13 +61,15 @@ trait Player {
         // update opponent ships grid
         opponent.shipsGrid = opponent.shipsGrid.setCase(opponentGrid, target.x, target.y, missed)
         missed
+      case `caseAttacked` if caseAttacked == CaseType.H || caseAttacked == CaseType.M =>
+        CaseType.Tried
     }
   }
 
   /**
-    *
-    * @param target
-    * @return
+    * update the ships of the player if the target was a ship position
+    * @param target position hit
+    * @return true if the ship is sunk or else false
     */
   def updateShips(target:Position) : Boolean = {
     val shipsToUpdate = ships

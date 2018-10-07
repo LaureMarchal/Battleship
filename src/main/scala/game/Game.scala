@@ -2,20 +2,23 @@ package game
 
 import grid.{CaseType, Grid}
 import helpers.BoatType
-import helpers.Utils._
+import helpers.Helper._
 import player.{AI, Human, Player}
 
 import scala.annotation.tailrec
 
+/**
+  * Object Game that is used to play (create players, gamestate..)
+  */
 object Game {
 
   //ships configuration in battleship
   //val shipsType : List[BoatType] = getBoatConfiguration()
-  //val shipsType : List[BoatType] = List(BoatType("Submarine",3),BoatType("Destroyer",2))
-  val shipsType : List[BoatType] = List(BoatType("Destroyer",2))
+  val shipsType : List[BoatType] = List(BoatType("Submarine",3),BoatType("Destroyer",2))
+  //val shipsType : List[BoatType] = List(BoatType("Destroyer",2))
 
   /**
-    *
+    * Create a player with empty grids, live points and a name
     * @return Player
     */
   def createPlayer(playerType:Int): Player = {
@@ -37,6 +40,7 @@ object Game {
 
   /**
     * Function to prompt the user to choose between multi-player and solo mode
+    * @return GameState with 2 players (active and opponent)
     */
   def selectModeLoop(): GameState = {
     val mode = getGameModeFromUserInput()
@@ -69,7 +73,9 @@ object Game {
   }
 
   /**
-    *
+    * Function to prompt the players to place their ships
+    * @param g gameState (player active or not)
+    * @return the new game state with players with placed ships
     */
   def placeShipsLoop(g:GameState): GameState = {
     @tailrec
@@ -91,41 +97,46 @@ object Game {
   }
 
   /**
-    * GameLoop
+    * Function to prompt the user to play
+    * @param g gamestate with players updated each turn
+    * @return the new gamestate
     */
   def gameLoop(g:GameState): GameState = {
     if (g.getActivePlayer.livePoints == 0)
       g
     else {
       val name = g.getActivePlayer.name
-      println(s"Player $name. It's your turn !\n")
+      println(s"\nPlayer $name. It's your turn !\n")
       // Show shipsGrid
-      println("Your ships Grid : ")
+      println("Your ships Grid :\n")
       g.getActivePlayer.shipsGrid.displayGrid()
       // Show Shots Grid
-      println("Your shots Grid : ")
+      println("Your shots Grid :\n")
       g.getActivePlayer.shotsGrid.displayGrid()
       //Ask for target
       val target = getTargetFromInput()
       // Shoot
-      val shotType = g.getActivePlayer.shoot(target,g.getOpponent)
+      val shotResult = g.getActivePlayer.shoot(target,g.getOpponent)
       // return result of shot
-      shotType match {
+      shotResult match {
         case CaseType.Sunk => displaySunk()
         case CaseType.H =>
           displayHit()
-          println("ships opp : ")
-          println(g.getOpponent.ships)
         case CaseType.M => displayMissed()
+        case CaseType.Tried => displayTried()
       }
       // return shotsGrid
-      println("Your shots Grid after shot : ")
+      println("Your new shots grid after your shot : ")
       g.getActivePlayer.shotsGrid.displayGrid()
       //Switch Players
       gameLoop(g.switchPlayers)
     }
   }
 
+  /**
+    * Function to prompt the user if he/she wants to play again or stop the Program
+    * @return
+    */
   def rematch() : Boolean = {
     val response = askForRematch()
     response match {

@@ -6,6 +6,10 @@ import scala.collection.immutable.List
 import scala.annotation.tailrec
 import ship.{Position, Ship}
 
+/**
+  * Grid that contains the list of list of case (which have a particular type)
+  * @param grid list of list
+  */
 case class Grid(grid: List[List[CaseType]]) {
 
 
@@ -13,8 +17,8 @@ case class Grid(grid: List[List[CaseType]]) {
 
   /**
     * Check if a ship is not already on the position
-    * @param position
-    * @return Bool
+    * @param position (x,y)
+    * @return true if not ship there yet or else false
     */
   def isValidPositionForShip(position: Position): Boolean = {
     grid(position.x)(position.y) match {
@@ -25,30 +29,27 @@ case class Grid(grid: List[List[CaseType]]) {
 
   /**
     * check if a ship can be placed on those positions
-    * @param ship
-    * @return
+    * @param positions list of (x,y)
+    * @return true is each position is valid or else false
     */
-  def isValidPlaceForShip(ship: Ship): Boolean = {
-    @tailrec
-    def areAllPositionsValid(positions: List[Position]): Boolean = {
-      if (positions.isEmpty)
-        true
-      else
+  def isValidPlaceForShip(positions: List[Position]): Boolean = {
+    if (positions.isEmpty)
+      true
+    else {
       if (!isValidPositionForShip(positions.head))
         false
       else
-        areAllPositionsValid(positions.tail)
+        isValidPlaceForShip(positions.tail)
     }
-    areAllPositionsValid(ship.positions)
   }
 
   // Placing on grid
 
   /**
-    * set a case of the grid
-    * @param posX
-    * @param posY
-    * @param mark
+    * set a case of the grid to a type
+    * @param posX x int
+    * @param posY y int
+    * @param mark type of the case to set
     * @return grid
     */
   def setCase(gridToUpdate: List[List[CaseType]],posX: Int, posY: Int, mark: CaseType): Grid = {
@@ -60,9 +61,9 @@ case class Grid(grid: List[List[CaseType]]) {
 
   /**
     * place One ship at a time
-    * @param ship
-    * @param grid
-    * @return
+    * @param ship to place (add in ships of player and shipsGrid)
+    * @param grid to update (shipsGrid of the player)
+    * @return the updated shipsGrid
     */
   def placeOneShip(ship:Ship, grid: List[List[CaseType]]):Grid = {
     @tailrec
@@ -81,6 +82,9 @@ case class Grid(grid: List[List[CaseType]]) {
 
   //Display on command line
 
+  /**
+    * User-friendly way of showing a grid to players
+    */
   def displayGrid(): Unit = {
     println(s"\n $grid")
   }

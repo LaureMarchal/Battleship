@@ -1,23 +1,27 @@
 package game
 
 import game.Game._
-import helpers.Utils._
+import helpers.Helper._
 
+/**
+  * Main object to launch the game
+  */
 object Main extends App {
-  println("Hello ! You are going to play a battleship !")
 
+  /**
+    * Main loop to play battleship as many times as user wants
+    */
   def mainLoop(): Unit = {
-    //Prompt the user to choose between multi-player and AIs mode
     var gameState = selectModeLoop()
     gameState = placeShipsLoop(gameState)
-    println("Let's Play")
+    println("\nLet's Play")
     gameState = gameLoop(gameState)
-    //Return winner and ask for rematch
     displayWinner(gameState)
-    if (rematch())
-      mainLoop()
+    // Ask for replay
+    if (rematch()) mainLoop()
   }
 
   // Start the game
+  println("Hello ! You are going to play a battleship !")
   mainLoop()
 }
