@@ -4,8 +4,7 @@ import game.Game._
 import grid.{CaseType, Grid}
 import helpers.Helper._
 import players.AIs.EasyAI
-import players.Human
-import ship.BoatType
+import ship.{BoatType, Position}
 
 /**
   * Main object to launch the game
@@ -29,11 +28,17 @@ object Main extends App {
   // Start the game
   println("Hello ! You are going to play a battleship !")
   mainLoop()*/
-  val shipsType : List[BoatType] = List(BoatType("Destroyer",2))
+  val shipsType : List[BoatType] = List(BoatType("Destroyer",2),BoatType("Submarine",3))
   val livePoints = getLivePoints(shipsType)
   val emptyShipsGrid = Grid(List.fill(10)(List.fill(10)(CaseType.W)))
   val emptyShotsGrid = Grid(List.fill(10)(List.fill(10)(CaseType.W)))
-  val test = EasyAI(emptyShipsGrid, emptyShotsGrid,1, livePoints)
+  val test = EasyAI(emptyShipsGrid, emptyShotsGrid, livePoints)
 
-  val direction,positions = test.generateShipPlacingAI(BoatType("Destroyer",2),1)
+  val (direction,positions) = test.generateShipPlacingAI(shipsType.head,Position(0,0))
+  println(s"direction : $direction")
+  println(s"positions : $positions")
+
+  val (direction2,positions2) = test.generateShipPlacingAI(shipsType.last,Position(0,0))
+  println(s"direction : $direction2")
+  println(s"positions : $positions2")
 }

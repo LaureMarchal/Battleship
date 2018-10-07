@@ -53,14 +53,14 @@ object Helper {
     * get a random direction to place a ship
     * @return
     */
-  def getRandomDirectionStart(): (String,Position) = {
+  def getRandomDirectionStart(shipPosFirst:Position): (String,Position) = {
     val random = new Random()
     val dir = random.nextInt(4)
     dir match {
-      case 0 => ("N",Position(0,9))
-      case 1 => ("S",Position(0,0))
-      case 2 => ("E",Position(0,0))
-      case 3 => ("W",Position(9,0))
+      case 0 => ("N",Position(shipPosFirst.x,shipPosFirst.y + 10))
+      case 1 => ("S",shipPosFirst)
+      case 2 => ("E",shipPosFirst)
+      case 3 => ("W",Position(shipPosFirst.x + 10,shipPosFirst.y))
     }
   }
 
