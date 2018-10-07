@@ -67,7 +67,8 @@ case class EasyAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int)
         placeShips(shipsType)
       } else {
         // create the ship
-        shipPosFirst = Position(shipPosFirst.x + 1,shipPosFirst.y + 1)
+        //TODO : find a way to have different start position for random ship placing without out of grid
+        //shipPosFirst = Position(shipPosFirst.x + 1,shipPosFirst.y + 1)
         val newShip = Ship(shipsType.head.name,shipsType.head.size,direction,positions)
         //place it on the grid
         shipsGrid = shipsGrid.placeOneShip(newShip,shipsGrid.grid)

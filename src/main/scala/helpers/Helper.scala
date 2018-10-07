@@ -57,10 +57,10 @@ object Helper {
     val random = new Random()
     val dir = random.nextInt(4)
     dir match {
-      case 0 => ("N",Position(shipPosFirst.x,shipPosFirst.y + 10))
+      case 0 => ("N",Position(shipPosFirst.x,shipPosFirst.y + 9))
       case 1 => ("S",shipPosFirst)
       case 2 => ("E",shipPosFirst)
-      case 3 => ("W",Position(shipPosFirst.x + 10,shipPosFirst.y))
+      case 3 => ("W",Position(shipPosFirst.x + 9,shipPosFirst.y))
     }
   }
 

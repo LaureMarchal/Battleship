@@ -84,7 +84,7 @@ object Game {
       if (nbPlayers == 0)
         g
       else {
-        if (g.getActivePlayer.getClass.isInstance(Human)) {
+        if (g.getActivePlayer.isInstanceOf[Human]) {
           val name = g.getActivePlayer.name
           println(s"Player $name. It's your turn !\n")
           println("You are going to place your ships.\n")
@@ -93,7 +93,7 @@ object Game {
           // To display the grid properly to the user
           g.getActivePlayer.shipsGrid.displayGrid()
         } else {
-          println("Please wait. The AI is placing its ships.\n")
+          println("Please wait. The AI is placing its ships...\n")
           val listShips = g.getActivePlayer.placeShips(shipsType)
           g.getActivePlayer.ships = listShips
         }
@@ -112,7 +112,7 @@ object Game {
     if (g.getActivePlayer.livePoints == 0)
       g
     else {
-      if (g.getActivePlayer.getClass.isInstance(Human)) {
+      if (g.getActivePlayer.isInstanceOf[Human]) {
         val name = g.getActivePlayer.name
         println(s"\nPlayer $name. It's your turn !\n")
         // Show shipsGrid
@@ -123,6 +123,7 @@ object Game {
         g.getActivePlayer.shotsGrid.displayGrid()
       } else {
         println(s"\nIt's the AI turn !\n")
+        println(g.getActivePlayer.ships)
       }
       // Ask/get target
       val target = g.getActivePlayer.chooseTarget()
