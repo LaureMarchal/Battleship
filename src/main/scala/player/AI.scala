@@ -1,8 +1,8 @@
 package player
-import grid.CaseType.CaseType
+
 import grid.Grid
 import helpers.BoatType
-import ship.{Position, Ship}
+import ship.Ship
 
 case class AI(var shipsGrid: Grid, var shotsGrid: Grid, level:Int, var livePoints: Int) extends Player {
 
@@ -13,9 +13,4 @@ case class AI(var shipsGrid: Grid, var shotsGrid: Grid, level:Int, var livePoint
     ships
   }
 
-  override def notSunkShips(): List[Ship] = ???
-
-  override def shoot(target: Position,opponent: Player): CaseType = ???
-
-  def updateShips(target:Position) : Boolean = ???
 }
