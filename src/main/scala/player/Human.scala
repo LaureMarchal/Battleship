@@ -1,9 +1,8 @@
 package player
 
 import grid.Grid
-import helpers.BoatType
 import helpers.Helper._
-import ship.Ship
+import ship.{BoatType, Ship}
 
 /**
   * Human player

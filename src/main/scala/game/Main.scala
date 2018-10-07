@@ -1,6 +1,7 @@
 package game
 
 import game.Game._
+import grid.{CaseType, Grid}
 import helpers.Helper._
 
 /**
@@ -14,14 +15,17 @@ object Main extends App {
   def mainLoop(): Unit = {
     var gameState = selectModeLoop()
     gameState = placeShipsLoop(gameState)
-    println("\nLet's Play")
+    println("Let's Play")
     gameState = gameLoop(gameState)
     displayWinner(gameState)
     // Ask for replay
     if (rematch()) mainLoop()
   }
 
+  /*
   // Start the game
   println("Hello ! You are going to play a battleship !")
-  mainLoop()
+  mainLoop()*/
+  val emptyShipsGrid = Grid(List.fill(10)(List.fill(10)(CaseType.W)))
+  emptyShipsGrid.displayGrid()
 }

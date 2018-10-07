@@ -2,8 +2,7 @@ package player
 
 import grid.CaseType.CaseType
 import grid.{CaseType, Grid}
-import helpers.BoatType
-import ship.{Position, Ship}
+import ship.{BoatType, Position, Ship}
 
 /**
   * Player behavior

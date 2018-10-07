@@ -1,11 +1,10 @@
 package helpers
 
 import game.GameState
-import ship.Position
+import ship.{BoatType, Position}
 
 import scala.collection.immutable.List
-import scala.io.StdIn.readInt
-import scala.io.StdIn.readLine
+import scala.io.StdIn.{readInt, readLine}
 
 /**
   * Object Helper that contains each function to prompt the user, print on console or specific to battleship game

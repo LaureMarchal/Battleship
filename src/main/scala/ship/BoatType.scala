@@ -1,4 +1,4 @@
-package helpers
+package ship
 
 /**
   * boat type (name,size) the definition of a ship to play with

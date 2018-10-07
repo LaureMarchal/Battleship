@@ -1,9 +1,9 @@
 package game
 
 import grid.{CaseType, Grid}
-import helpers.BoatType
 import helpers.Helper._
 import player.{AI, Human, Player}
+import ship.BoatType
 
 import scala.annotation.tailrec
 

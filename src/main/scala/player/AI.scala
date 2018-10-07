@@ -1,8 +1,7 @@
 package player
 
 import grid.Grid
-import helpers.BoatType
-import ship.{Position, Ship}
+import ship.{BoatType, Position, Ship}
 
 /**
   * AI player
