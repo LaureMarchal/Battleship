@@ -13,15 +13,14 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
   override val name: String = "Difficult AI"
   override var ships: List[Ship] = Nil
   var lastShots:List[Position] = Nil
-  var shipPosFirst:Position = Position(0,0)
 
   /**
     * Generate the place of a ship depending on AI level
     * @param shipType list of boat type (name,size) to place
     * @return
     */
-  def generateShipPlacingAI(shipType: BoatType,shipPosFirst:Position) : (String,List[Position]) = {
-    val (direction,posStart) = getRandomDirectionStart(shipPosFirst)
+  def generateShipPlacingAI(shipType: BoatType) : (String,List[Position]) = {
+    val (direction,posStart) = getRandomDirectionStart()
     @tailrec
     def generateRandom(direction: String,posStart:Position,size: Int,list:List[Position]) : (String,List[Position]) = {
       if (list.length == size)
@@ -55,12 +54,11 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
     if (shipsType.isEmpty)
       Nil
     else {
-      val (direction,positions) = generateShipPlacingAI(shipsType.head,shipPosFirst)
+      val (direction,positions) = generateShipPlacingAI(shipsType.head)
       if (!shipsGrid.isValidPlaceForShip(positions)) {
         placeShips(shipsType)
       } else {
         // create the ship
-        shipPosFirst = Position(shipPosFirst.x + 1,shipPosFirst.y + 1)
         val newShip = Ship(shipsType.head.name, direction, positions)
         //place it on the grid
         shipsGrid = shipsGrid.placeOneShip(newShip,shipsGrid.grid)

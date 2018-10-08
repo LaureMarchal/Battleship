@@ -18,7 +18,6 @@ case class EasyAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int)
 
   override val name: String = "Easy AI"
   override var ships: List[Ship] = Nil
-  var shipPosFirst:Position = Position(0,0)
 
 
   /**
@@ -26,9 +25,8 @@ case class EasyAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int)
     * @param shipType list of boat type (name,size) to place
     * @return
     */
-  def generateShipPlacingAI(shipType: BoatType,shipPosFirst:Position) : (String,List[Position]) = {
-    val (direction,posStart) = getRandomDirectionStart(shipPosFirst)
-    println(s"random dir et pos : $direction, $posStart")
+  def generateShipPlacingAI(shipType: BoatType) : (String,List[Position]) = {
+    val (direction,posStart) = getRandomDirectionStart()
     @tailrec
     def generateRandom(direction: String,posStart:Position,size: Int,list:List[Position]) : (String,List[Position]) = {
       if (list.length == size)
@@ -62,13 +60,11 @@ case class EasyAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int)
     if (shipsType.isEmpty)
       Nil
     else {
-      val (direction,positions) = generateShipPlacingAI(shipsType.head,shipPosFirst)
+      val (direction,positions) = generateShipPlacingAI(shipsType.head)
       if (!shipsGrid.isValidPlaceForShip(positions)) {
         placeShips(shipsType)
       } else {
         // create the ship
-        //TODO : find a way to have different start position for random ship placing without out of grid
-        //shipPosFirst = Position(shipPosFirst.x + 1,shipPosFirst.y + 1)
         val newShip = Ship(shipsType.head.name, direction, positions)
         //place it on the grid
         shipsGrid = shipsGrid.placeOneShip(newShip,shipsGrid.grid)

@@ -14,7 +14,6 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
   override var ships: List[Ship] = Nil
   var lastHitShot:Position = _
   var countTriedTarget: Int = 0
-  var shipPosFirst:Position = Position(0,0)
 
 
   /**
@@ -22,8 +21,8 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
     * @param shipType list of boat type (name,size) to place
     * @return
     */
-  def generateShipPlacingAI(shipType: BoatType,shipPosFirst:Position) : (String,List[Position]) = {
-    val (direction,posStart) = getRandomDirectionStart(shipPosFirst)
+  def generateShipPlacingAI(shipType: BoatType) : (String,List[Position]) = {
+    val (direction,posStart) = getRandomDirectionStart()
     @tailrec
     def generateRandom(direction: String,posStart:Position,size: Int,list:List[Position]) : (String,List[Position]) = {
       if (list.length == size)
@@ -57,12 +56,11 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
     if (shipsType.isEmpty)
       Nil
     else {
-      val (direction,positions) = generateShipPlacingAI(shipsType.head,shipPosFirst)
+      val (direction,positions) = generateShipPlacingAI(shipsType.head)
       if (!shipsGrid.isValidPlaceForShip(positions)) {
         placeShips(shipsType)
       } else {
         // create the ship
-        shipPosFirst = Position(shipPosFirst.x + 1,shipPosFirst.y + 1)
         val newShip = Ship(shipsType.head.name, direction, positions)
         //place it on the grid
         shipsGrid = shipsGrid.placeOneShip(newShip,shipsGrid.grid)
@@ -78,6 +76,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
     */
   override def chooseTarget() : Position = {
     if (lastHitShot == null) {
+      println("no hit")
       val target = getRandomTarget()
       val caseAttacked = shotsGrid.grid(target.x)(target.y)
       if (caseAttacked == CaseType.M || caseAttacked == CaseType.H) {
@@ -90,7 +89,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
       val limitGridMaxY = lastHitShot.isLimitPositionMax(lastHitShot.y)
       countTriedTarget match {
         case 0 =>
-          countTriedTarget += 1
+          println("try N")
           if (!limitGridMinY) {
             val target = Position(lastHitShot.x,lastHitShot.y - 1)
             val caseAttacked = shotsGrid.grid(target.x)(target.y)
@@ -98,6 +97,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
               countTriedTarget += 1
               chooseTarget()
             } else {
+              countTriedTarget += 1
               target
             }
           } else {
@@ -105,7 +105,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
             chooseTarget()
           }
         case 1 =>
-          countTriedTarget += 1
+          println("try S")
           if (!limitGridMaxY) {
             val target = Position(lastHitShot.x,lastHitShot.y + 1)
             val caseAttacked = shotsGrid.grid(target.x)(target.y)
@@ -113,6 +113,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
               countTriedTarget += 1
               chooseTarget()
             } else {
+              countTriedTarget += 1
               target
             }
           } else {
@@ -120,7 +121,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
             chooseTarget()
           }
         case 2 =>
-          countTriedTarget += 1
+          println("try W")
           if (!limitGridMinX) {
             val target = Position(lastHitShot.x - 1,lastHitShot.y)
             val caseAttacked = shotsGrid.grid(target.x)(target.y)
@@ -128,6 +129,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
               countTriedTarget += 1
               chooseTarget()
             } else {
+              countTriedTarget += 1
               target
             }
           } else {
@@ -135,7 +137,8 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
             chooseTarget()
           }
         case 3 =>
-          countTriedTarget = 0
+          println("try E")
+          countTriedTarget += 1
           Position(lastHitShot.x + 1,lastHitShot.y)
       }
     }
@@ -170,6 +173,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
         }
         else
           lastHitShot = target
+          if (countTriedTarget > 0) countTriedTarget -= 1
           hit
       case CaseType.W =>
         val missed = CaseType.M

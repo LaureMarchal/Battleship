@@ -126,7 +126,7 @@ object Game {
         g.getActivePlayer.shotsGrid.displayGrid()
       } else {
         println(s"\nIt's the AI turn !\n")
-        println(g.getActivePlayer.ships)
+        //println(g.getActivePlayer.ships)
       }
       // Ask/get target
       val target = g.getActivePlayer.chooseTarget()

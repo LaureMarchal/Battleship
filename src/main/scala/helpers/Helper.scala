@@ -55,14 +55,14 @@ object Helper {
     * get a random direction to place a ship
     * @return
     */
-  def getRandomDirectionStart(shipPosFirst:Position): (String,Position) = {
+  def getRandomDirectionStart(): (String,Position) = {
     val random = new Random()
     val dir = random.nextInt(4)
     dir match {
-      case 0 => ("N",Position(shipPosFirst.x,shipPosFirst.y + 9))
-      case 1 => ("S",shipPosFirst)
-      case 2 => ("E",shipPosFirst)
-      case 3 => ("W",Position(shipPosFirst.x + 9,shipPosFirst.y))
+      case 0 => ("N",Position(random.nextInt(10),9))
+      case 1 => ("S",Position(random.nextInt(10),0))
+      case 2 => ("E",Position(0,random.nextInt(10)))
+      case 3 => ("W",Position(9,random.nextInt(10)))
     }
   }
 
@@ -251,7 +251,6 @@ object Helper {
     * @param g gamestate
     */
   def displayWinner(g:GameState) : Unit = {
-    println("End of the game")
     val winner = g.getOpponent.name
     println(s"Player $winner Congratulations You Won !")
   }
@@ -289,7 +288,7 @@ object Helper {
     * @return the answer of the player
     */
   def askForRematch() : String = {
-    val input = readLine("Do you want to replay or quit the game ?\n - P : Play again\n- Q : Quit battleship)\n").toUpperCase
+    val input = readLine("Do you want to replay or quit the game ?\n- P : Play again\n- Q : Quit battleship\n").toUpperCase
     input match {
       case "P" => "replay"
       case "Q" => "quit"
