@@ -14,7 +14,7 @@ object Main extends App {
   def mainLoop(): Unit = {
     var gameState = selectModeLoop()
     gameState = placeShipsLoop(gameState)
-    println("Let's Play")
+    displayBeforePlaying()
     gameState = gameLoop(gameState)
     displayWinner(gameState)
     // Ask for replay

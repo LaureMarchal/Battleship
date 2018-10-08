@@ -27,6 +27,7 @@ case class Human(name:String, var shipsGrid: Grid, var shotsGrid: Grid, var live
     else {
       val (direction,positions) = getPositionForShipPlacing(shipsType.head)
       if (!shipsGrid.isValidPlaceForShip(positions)) {
+        displayPlaceOccupied()
         placeShips(shipsType)
       } else {
         // create the ship

@@ -88,6 +88,7 @@ object Game {
           val name = g.getActivePlayer.name
           println(s"Player $name. It's your turn !\n")
           println("You are going to place your ships.\n")
+          displayBeforePlacingShip()
           val listShips = g.getActivePlayer.placeShips(shipsType)
           g.getActivePlayer.ships = listShips
           // To display the grid properly to the user
@@ -97,6 +98,8 @@ object Game {
           val listShips = g.getActivePlayer.placeShips(shipsType)
           g.getActivePlayer.ships = listShips
         }
+        //Clear the console for next player
+        print("\033[H\033[2J")
         placeShipsRec(g.switchPlayers, nbPlayers - 1)
       }
     }
@@ -136,6 +139,8 @@ object Game {
         case CaseType.M => displayMissed()
         case CaseType.Tried => displayTried()
       }
+      //Clear the console for next player
+      print("\033[H\033[2J")
       //Switch Players
       gameLoop(g.switchPlayers)
     }

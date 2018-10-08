@@ -46,7 +46,9 @@ object Helper {
     */
   def getRandomTarget(): Position = {
     val random = new Random()
-    Position(random.nextInt(10),random.nextInt(10))
+    val pos = Position(random.nextInt(10),random.nextInt(10))
+    if (pos.isValidPosition()) pos
+    else getRandomTarget()
   }
 
   /**
@@ -118,16 +120,14 @@ object Helper {
     if (size == 0)
       Nil
     else {
-      val inputPos = readLine("Enter position (must be between 1 and 10 or A and J => example : A 9 ) : ")
+      val inputPos = readLine("Position : ")
       try {
         val position = handlePositionInput(inputPos)
         if (!position.isValidPosition()) {
           println("Not a valid position (out of the grid). Please Try again")
           getPositionsShipFromInput(size)
         } else {
-          println(s"(x,y) = $position")
-          val newSize = size - 1
-          position::getPositionsShipFromInput(newSize)
+          position::getPositionsShipFromInput(size - 1)
         }
       } catch {
         case e:Exception =>
@@ -143,7 +143,7 @@ object Helper {
     * @return the direction of the ship
     */
   def getDirectionShipFromInput(boatType: BoatType): String = {
-    val input = readLine(s"In which direction do you want your ${boatType.name} to go : (Please Answer by N (NORTH), S (SOUTH), E (EAST) or W (WEST)\nDirection : ")
+    val input = readLine("Direction : ")
     val inputUp = input.toUpperCase
     inputUp match {
       case "N" => inputUp
@@ -208,14 +208,13 @@ object Helper {
     * @return Position which is the target of the shot
     */
   def getTargetFromInput() : Position = {
-    val inputPos = readLine("Enter your target (must be between 1 and 10 or A and J => example : A 9 ) : ")
+    val inputPos = readLine("Target : ")
     try {
       val position = handlePositionInput(inputPos)
       if (!position.isValidPosition()) {
         println("Not a valid target (out of the grid). Please Try again")
         getTargetFromInput()
       } else {
-        println(s"Target(x,y) = $position")
         position
       }
     } catch {
@@ -227,6 +226,26 @@ object Helper {
 
   // functions to display message on the console
 
+  /**
+    * Gives guidelines before placing the ships
+    */
+  def displayBeforePlacingShip(): Unit = {
+    println("The grid for this battleship goes from A to J on the horizontal axe and 1 and 10 on the vertical axe.")
+    println("For each ship, a direction will be asked, Please Answer by N (NORTH), S (SOUTH), E (EAST) or W (WEST).")
+  }
+
+  /**
+    * Gives guidelines before starting to play
+    */
+  def displayBeforePlaying(): Unit = {
+    println("Let's Play")
+    println("To do so, a target will be asked each turn.\nPlease answer like the example: A1")
+  }
+
+  /**
+    * Indicates to player when he/whe chose the same place for different ships
+    */
+  def displayPlaceOccupied(): Unit = println("Those positions are already occupied by ships. Please choose differently.")
   /**
     * Indicates the end of game and the name of the winner
     * @param g gamestate
