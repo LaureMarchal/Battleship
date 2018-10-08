@@ -140,6 +140,10 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
           println("try E")
           countTriedTarget += 1
           Position(lastHitShot.x + 1,lastHitShot.y)
+        case _ =>
+          println("WRONG")
+          countTriedTarget = 0
+          lastHitShot
       }
     }
 
