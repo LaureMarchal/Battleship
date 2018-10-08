@@ -31,7 +31,7 @@ case class Human(name:String, var shipsGrid: Grid, var shotsGrid: Grid, var live
         placeShips(shipsType)
       } else {
         // create the ship
-        val newShip = Ship(shipsType.head.name,shipsType.head.size,direction,positions)
+        val newShip = Ship(shipsType.head.name, direction, positions)
         //place it on the grid
         shipsGrid = shipsGrid.placeOneShip(newShip,shipsGrid.grid)
         //add to player and continue placing ships

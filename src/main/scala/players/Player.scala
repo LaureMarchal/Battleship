@@ -26,7 +26,7 @@ trait Player {
     * Return the ships that are not sunk
     * @return list of not sunk ships
     */
-  def notSunkShips(): List[Ship] = ships.filterNot(x => x.size == 0)
+  def notSunkShips(): List[Ship] = ships.filterNot(x => x.size() == 0)
 
   /**
     * Shoot a target

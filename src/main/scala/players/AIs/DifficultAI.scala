@@ -61,7 +61,7 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
       } else {
         // create the ship
         shipPosFirst = Position(shipPosFirst.x + 1,shipPosFirst.y + 1)
-        val newShip = Ship(shipsType.head.name,shipsType.head.size,direction,positions)
+        val newShip = Ship(shipsType.head.name, direction, positions)
         //place it on the grid
         shipsGrid = shipsGrid.placeOneShip(newShip,shipsGrid.grid)
         //add to player and continue placing ships
