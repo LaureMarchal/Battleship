@@ -170,8 +170,8 @@ object Game {
       // return result of shot
       shotResult match {
         case CaseType.Sunk => displaySunk()
-        case CaseType.H => displayHit()
-        case CaseType.M => displayMissed()
+        case CaseType.X => displayHit()
+        case CaseType.O => displayMissed()
         case CaseType.Tried => displayTried()
       }
       //Clear the console for next player

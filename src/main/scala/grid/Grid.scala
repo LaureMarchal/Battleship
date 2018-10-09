@@ -86,20 +86,20 @@ case class Grid(grid: List[List[CaseType]]) {
     * User-friendly way of showing a grid to players
     */
   def displayGrid(): Unit = {
-    println("A B C D E F G H I J")
-    println("-----------------------------------------")
+    println("\n     A   B   C   D   E   F   G   H   I   J  ")
+    println("   -----------------------------------------")
     @tailrec
     def displayLineGrid(grid: List[List[CaseType]], index: Int) : Unit = {
       if (grid.isEmpty)
         println("")
       else {
         val lineToDisplay = grid.head
-        print(index)
+        if (index == 10) print(s"$index ") else print(s"$index  ")
         @tailrec
         def displayCaseGrid(line: List[CaseType]) : Unit = {
           if (line.isEmpty) {
             print("|")
-            println("\n-----------------------------------------")
+            println("\n   -----------------------------------------")
           } else {
             val pos = line.head
             print(s"| $pos ")

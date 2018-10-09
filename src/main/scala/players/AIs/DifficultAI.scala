@@ -80,7 +80,7 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
         if (!lastHitShot.isLimitPositionMin(lastHitShot.x)) {
           val target = Position(lastHitShot.y,lastHitShot.x - 1)
           val caseAttacked = shotsGrid.grid(target.x)(target.y)
-          if (caseAttacked != CaseType.M && caseAttacked != CaseType.H) {
+          if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
             countTriedTarget += 1
             return target
           }
@@ -91,7 +91,7 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
         if (!lastHitShot.isLimitPositionMax(lastHitShot.x)) {
           val target = Position(lastHitShot.y,lastHitShot.x + 1)
           val caseAttacked = shotsGrid.grid(target.x)(target.y)
-          if (caseAttacked != CaseType.M && caseAttacked != CaseType.H) {
+          if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
             countTriedTarget += 1
             return target
           }
@@ -102,7 +102,7 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
         if (!lastHitShot.isLimitPositionMin(lastHitShot.y)) {
           val target = Position(lastHitShot.y - 1,lastHitShot.x)
           val caseAttacked = shotsGrid.grid(target.x)(target.y)
-          if (caseAttacked != CaseType.M && caseAttacked != CaseType.H) {
+          if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
             countTriedTarget += 1
             return target
           }
@@ -112,7 +112,7 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
       case 3 =>
         val target = Position(lastHitShot.y + 1,lastHitShot.x)
         val caseAttacked = shotsGrid.grid(target.x)(target.y)
-        if (caseAttacked != CaseType.M && caseAttacked != CaseType.H) {
+        if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
           countTriedTarget += 1
           target
         } else {
@@ -139,7 +139,7 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
     else {
       val target = getRandomParityTarget()
       val caseAttacked = shotsGrid.grid(target.x)(target.y)
-      if (caseAttacked != CaseType.M && caseAttacked != CaseType.H) target
+      if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) target
       else chooseTarget()
     }
   }
@@ -155,7 +155,7 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
     val caseAttacked = opponentGrid(target.x)(target.y)
     caseAttacked match {
       case CaseType.S =>
-        val hit = CaseType.H
+        val hit = CaseType.X
         // update player shotsgrid
         shotsGrid = shotsGrid.setCase(shotsGrid.grid, target.x, target.y, hit)
         // update opponent ships grid
@@ -176,13 +176,13 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
           hit
         }
       case CaseType.W =>
-        val missed = CaseType.M
+        val missed = CaseType.O
         // update player shotsgrid
         shotsGrid = shotsGrid.setCase(shotsGrid.grid, target.x, target.y, missed)
         // update opponent ships grid
         opponent.shipsGrid = opponent.shipsGrid.setCase(opponentGrid, target.x, target.y, missed)
         missed
-      case `caseAttacked` if caseAttacked == CaseType.H || caseAttacked == CaseType.M =>
+      case `caseAttacked` if caseAttacked == CaseType.X || caseAttacked == CaseType.O =>
         CaseType.Tried
     }
   }
