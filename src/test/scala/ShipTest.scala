@@ -1,5 +1,4 @@
-import ship.Ship
-import ship.Position
+import battleship.{Position, Ship}
 import org.scalatest._
 
 class ShipTest extends FlatSpec with Matchers {

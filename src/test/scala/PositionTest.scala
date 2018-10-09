@@ -1,4 +1,4 @@
-import ship.Position
+import battleship.Position
 import org.scalatest._
 
 class PositionTest extends FlatSpec with Matchers {
@@ -31,13 +31,13 @@ class PositionTest extends FlatSpec with Matchers {
     val posLimitMin2 = Position(2, 0)
     val posNotLimit1 = Position(9, 0)
 
-    posLimitMin1.isLimitPositionMin(posLimitMin1.x) should be (true)
-    posLimitMin2.isLimitPositionMin(posLimitMin2.y) should be (true)
-    posNotLimit1.isLimitPositionMin(posNotLimit1.y) should be (true)
+    posLimitMin1.isLimitPositionMin(posLimitMin1.y) should be (true)
+    posLimitMin2.isLimitPositionMin(posLimitMin2.x) should be (true)
+    posNotLimit1.isLimitPositionMin(posNotLimit1.x) should be (true)
 
-    posLimitMin1.isLimitPositionMin(posLimitMin1.y) should be (false)
-    posLimitMin2.isLimitPositionMin(posLimitMin2.x) should be (false)
-    posNotLimit1.isLimitPositionMin(posNotLimit1.x) should be (false)
+    posLimitMin1.isLimitPositionMin(posLimitMin1.x) should be (false)
+    posLimitMin2.isLimitPositionMin(posLimitMin2.y) should be (false)
+    posNotLimit1.isLimitPositionMin(posNotLimit1.y) should be (false)
   }
 
   "isLimitPositionMax" should "true if the coordinate == 9" in {
@@ -45,12 +45,12 @@ class PositionTest extends FlatSpec with Matchers {
     val posLimitMax2 = Position(9, 2)
     val posNotLimit1 = Position(0, 9)
 
-    posLimitMax1.isLimitPositionMax(posLimitMax1.y) should be (true)
-    posLimitMax2.isLimitPositionMax(posLimitMax2.x) should be (true)
-    posNotLimit1.isLimitPositionMax(posNotLimit1.y) should be (true)
+    posLimitMax1.isLimitPositionMax(posLimitMax1.x) should be (true)
+    posLimitMax2.isLimitPositionMax(posLimitMax2.y) should be (true)
+    posNotLimit1.isLimitPositionMax(posNotLimit1.x) should be (true)
 
-    posLimitMax1.isLimitPositionMax(posLimitMax1.x) should be (false)
-    posLimitMax2.isLimitPositionMax(posLimitMax2.y) should be (false)
-    posNotLimit1.isLimitPositionMax(posNotLimit1.x) should be (false)
+    posLimitMax1.isLimitPositionMax(posLimitMax1.y) should be (false)
+    posLimitMax2.isLimitPositionMax(posLimitMax2.x) should be (false)
+    posNotLimit1.isLimitPositionMax(posNotLimit1.y) should be (false)
   }
 }
