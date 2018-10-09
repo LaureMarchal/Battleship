@@ -40,6 +40,19 @@ object Helper {
   }
 
   // AI helpers functions
+
+  /**
+    * get a random position with an even int in it
+    * @return
+    */
+  def getRandomParityTarget(): Position = {
+    val random = new Random()
+    val x = random.nextInt(9)
+    val y = random.nextInt(9)
+    val toTry = random.nextInt(2)
+    if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) if (toTry == 0) Position(x, y + 1) else  Position(x + 1, y)
+    else Position(x, y)
+  }
   /**
     * get a random target
     * @return position to shoot

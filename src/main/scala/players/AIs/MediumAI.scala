@@ -12,7 +12,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
 
   override val name: String = "Medium AI"
   override var ships: List[Ship] = Nil
-  var lastHitShot:Position = _
+  var lastHitShots:List[Position] = Nil
   var countTriedTarget: Int = 0
 
 
@@ -75,13 +75,14 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
     * @return
     */
   override def chooseTarget() : Position = {
-    if (lastHitShot == null) {
+    if (lastHitShots.isEmpty) {
       val target = getRandomTarget()
       val caseAttacked = shotsGrid.grid(target.x)(target.y)
       if (caseAttacked != CaseType.M && caseAttacked != CaseType.H) target
       else chooseTarget()
     }
     else {
+      val lastHitShot = lastHitShots.head
       countTriedTarget match {
         case 0 =>
           if (!lastHitShot.isLimitPositionMin(lastHitShot.x)) {
@@ -117,11 +118,21 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
           countTriedTarget += 1
           chooseTarget()
         case 3 =>
-          countTriedTarget += 1
-          Position(lastHitShot.y + 1,lastHitShot.x)
+          val target = Position(lastHitShot.y + 1,lastHitShot.x)
+          val caseAttacked = shotsGrid.grid(target.x)(target.y)
+          if (caseAttacked != CaseType.M && caseAttacked != CaseType.H) {
+            countTriedTarget += 1
+            target
+          } else {
+            val last = lastHitShots.last
+            lastHitShots = last::lastHitShots.dropRight(1)
+            chooseTarget()
+          }
         case _ =>
-          countTriedTarget = 0
-          lastHitShot
+          countTriedTarget = 1
+          val last = lastHitShots.last
+          lastHitShots = last::lastHitShots.dropRight(1)
+          chooseTarget()
       }
     }
   }
@@ -148,11 +159,11 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
         opponent.livePoints -= 1
         //return the result
         if (isSunkShip) {
-          lastHitShot = null
+          lastHitShots = Nil
           countTriedTarget = 0
           CaseType.Sunk
         } else {
-          lastHitShot = target
+          lastHitShots = target::lastHitShots
           if (countTriedTarget > 0) countTriedTarget -= 1
           hit
         }
