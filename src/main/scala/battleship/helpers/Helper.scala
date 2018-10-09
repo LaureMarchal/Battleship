@@ -1,7 +1,6 @@
-package helpers
+package battleship.helpers
 
-import game.GameState
-import ship.{BoatType, Position}
+import battleship.{GameState, Position}
 
 import scala.collection.immutable.List
 import scala.io.StdIn.{readInt, readLine}
@@ -225,6 +224,14 @@ object Helper {
   }
 
   // functions to display message on the console
+
+  /**
+    * Clear the console
+    */
+  def clear() : Unit = {
+    Thread.sleep(500)
+    println("\033c")
+  }
 
   /**
     * Gives guidelines before placing the ships

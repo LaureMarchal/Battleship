@@ -1,18 +1,24 @@
-package players.AIs
+package battleship.AIs
 
-import grid.CaseType.CaseType
-import grid.{CaseType, Grid}
-import helpers.Helper.{getRandomDirectionStart, getRandomTarget}
-import players.Player
-import ship.{BoatType, Position, Ship}
+import battleship.helpers.CaseType.CaseType
+import battleship.helpers.Helper._
+import battleship.helpers.{BoatType, CaseType}
+import battleship.{Grid, Player, Position, Ship}
 
 import scala.annotation.tailrec
 
-case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int) extends Player {
+/**
+  * AI player
+  * @param shipsGrid grid for ships of the player
+  * @param shotsGrid grid for shots of the player
+  * @param livePoints int to know when a player lost
+  */
+case class EasyAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int) extends Player {
 
-  override val name: String = "Difficult AI"
+  override val name: String = "Easy AI"
   override var ships: List[Ship] = Nil
-  var lastShots:List[Position] = Nil
+  override var score: Int = 0
+
 
   /**
     * Generate the place of a ship depending on AI level
@@ -112,4 +118,5 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
         CaseType.Tried
     }
   }
+
 }

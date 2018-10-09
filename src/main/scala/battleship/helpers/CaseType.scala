@@ -1,4 +1,4 @@
-package grid
+package battleship.helpers
 
 /**
   * CaseType Enumeration to define the case possibilities

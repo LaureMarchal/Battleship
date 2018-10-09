@@ -1,4 +1,4 @@
-package ship
+package battleship
 
 /**
   * Position (int x, int y)

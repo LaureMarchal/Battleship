@@ -1,9 +1,7 @@
-package game
+package battleship
 
-import game.Game._
-import grid.{CaseType, Grid}
-import helpers.Helper._
-import ship.{Position, Ship}
+import battleship.Game._
+import battleship.helpers.Helper._
 
 /**
   * Main object to launch the game

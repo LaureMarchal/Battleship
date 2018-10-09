@@ -1,9 +1,8 @@
-package game
-
-import players.Player
+package battleship
 
 /**
   * GameState contains the 2 players and define the player who must play and the other
+ *
   * @param active player who plays
   * @param opponent player who waits
   */

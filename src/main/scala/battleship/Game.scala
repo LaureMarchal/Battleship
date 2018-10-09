@@ -1,10 +1,8 @@
-package game
+package battleship
 
-import grid.{CaseType, Grid}
+import AIs.{DifficultAI, EasyAI, MediumAI}
 import helpers.Helper._
-import players.AIs.{DifficultAI, EasyAI, MediumAI}
-import players.{Human, Player}
-import ship.BoatType
+import helpers.{BoatType, CaseType}
 
 import scala.annotation.tailrec
 
@@ -14,8 +12,8 @@ import scala.annotation.tailrec
 object Game {
 
   //ships configuration in battleship
-  //val shipsType : List[BoatType] = getBoatConfiguration()
-  val shipsType : List[BoatType] = List(BoatType("Submarine",3),BoatType("Destroyer",2))
+  val shipsType : List[BoatType] = getBoatConfiguration()
+  //val shipsType : List[BoatType] = List(BoatType("Submarine",3),BoatType("Destroyer",2))
   //val shipsType : List[BoatType] = List(BoatType("Destroyer",2))
 
   /**
@@ -100,6 +98,7 @@ object Game {
         }
         //Clear the console for next player
         print("\033[H\033[2J")
+        //clear()
         placeShipsRec(g.switchPlayers, nbPlayers - 1)
       }
     }

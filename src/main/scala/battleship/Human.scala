@@ -1,9 +1,8 @@
-package players
+package battleship
 
-import grid.CaseType.CaseType
-import grid.{CaseType, Grid}
+import helpers.CaseType.CaseType
 import helpers.Helper._
-import ship.{BoatType, Position, Ship}
+import helpers.{BoatType, CaseType}
 
 /**
   * Human player
@@ -15,6 +14,7 @@ import ship.{BoatType, Position, Ship}
 case class Human(name:String, var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int) extends Player {
 
   override var ships: List[Ship] = Nil
+  override var score: Int = 0
 
   /**
     * Place the ships of a human player
