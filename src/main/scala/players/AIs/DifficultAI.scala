@@ -28,16 +28,16 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
       else {
         direction match {
           case "N" =>
-            val newPos = Position(posStart.x,posStart.y - 1)
+            val newPos = Position(posStart.y,posStart.x - 1)
             generateRandom(direction,newPos,size,newPos::list)
           case "S" =>
-            val newPos = Position(posStart.x,posStart.y + 1)
+            val newPos = Position(posStart.y,posStart.x + 1)
             generateRandom(direction,newPos,size,newPos::list)
           case "E" =>
-            val newPos = Position(posStart.x + 1,posStart.y)
+            val newPos = Position(posStart.y + 1,posStart.x)
             generateRandom(direction,newPos,size,newPos::list)
           case "W" =>
-            val newPos = Position(posStart.x - 1,posStart.y)
+            val newPos = Position(posStart.y - 1,posStart.x)
             generateRandom(direction,newPos,size,newPos::list)
         }
       }
@@ -97,10 +97,8 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
         // update opponent live points
         opponent.livePoints -= 1
         //return the result
-        if (isSunkShip)
-          CaseType.Sunk
-        else
-          hit
+        if (isSunkShip) CaseType.Sunk
+        else hit
       case CaseType.W =>
         val missed = CaseType.M
         // update player shotsgrid
