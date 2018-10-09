@@ -1,25 +1,40 @@
 package battleship
 
-//import java.io.{BufferedWriter, File, FileWriter}
+import java.io.{BufferedWriter, File, FileWriter}
 
-import battleship.AIs.EasyAI
+import battleship.AIs.{DifficultAI, EasyAI, MediumAI}
 import battleship.Game._
+import battleship.helpers.CaseType
+import battleship.helpers.Helper._
 
 import scala.annotation.tailrec
 
-object AITest extends App{
+/**
+  * Test AI vs AI
+  */
+object AITest {
+
+  def placeShips(g: GameState) : Unit = {
+    val listShips1 = g.getActivePlayer.placeShips(shipsType)
+    g.getActivePlayer.ships = listShips1
+    val listShips2 = g.getOpponent.placeShips(shipsType)
+    g.getOpponent.ships = listShips2
+  }
 
   def clear(p: Player) : Player = {
-    val pToUpdate = p
-    if (p.isInstanceOf[EasyAI]) {
-      val newP = createPlayer(1)
-      newP.score = pToUpdate.score
-      newP
-    }
-    else {
-      val newP = createPlayer(2)
-      newP.score = pToUpdate.score
-      newP
+    p match {
+      case _: EasyAI =>
+        val player = EasyAI(Grid(List.fill(10)(List.fill(10)(CaseType.W))), Grid(List.fill(10)(List.fill(10)(CaseType.W))),getLivePoints(shipsType))
+        player.score = p.score
+        player
+      case _: MediumAI =>
+        val player = MediumAI(Grid(List.fill(10)(List.fill(10)(CaseType.W))), Grid(List.fill(10)(List.fill(10)(CaseType.W))), getLivePoints(shipsType))
+        player.score = p.score
+        player
+      case _: DifficultAI =>
+        val player = DifficultAI(Grid(List.fill(10)(List.fill(10)(CaseType.W))), Grid(List.fill(10)(List.fill(10)(CaseType.W))), getLivePoints(shipsType))
+        player.score = p.score
+        player
     }
   }
 
@@ -29,25 +44,22 @@ object AITest extends App{
     val gameState = GameState(player1,player2)
     //play 100 times
     play100Times(gameState)
-    //writeInCsv(levelEasy,scoreEasy,levelMedium,scoreMedium)
   }
 
-  def easyVsDifficult() : Unit = {
+  def easyVsDifficult() : GameState = {
     val player1 = createPlayer(1)
     val player2 = createPlayer(3)
     var gameState = GameState(player1,player2)
-    //play 100 times
-    //val (levelEasy,scoreEasy,levelDifficult,scoreDiff) = play100Times(gameState)
-    //writeInCsv(levelEasy,scoreEasy,levelDifficult,scoreDiff)
+    ///play 100 times
+    play100Times(gameState)
   }
 
-  def mediumVsDifficult() : Unit = {
+  def mediumVsDifficult() : GameState = {
     val player1 = createPlayer(2)
     val player2 = createPlayer(3)
     var gameState = GameState(player1,player2)
     //play 100 times
-    //val (levelMedium,scoreMedium,levelDifficult,scoreDiff) = play100Times(gameState)
-    //writeInCsv(levelMedium,scoreMedium,levelDifficult,scoreDiff)
+    play100Times(gameState)
   }
 
   def play100Times(gameState : GameState): GameState = {
@@ -59,52 +71,70 @@ object AITest extends App{
         val startingAI = gameState.getActivePlayer
         // clear the grids and ships before playing a new game
         var gameStateRunning = GameState(clear(gameState.getActivePlayer),clear(gameState.getOpponent))
+        //var gameStateRunning = GameState(clear(gameState.getActivePlayer),clear(gameState.getOpponent))
         //play
-        gameStateRunning = placeShipsLoop(gameState)
-        gameStateRunning = gameLoop(gameStateRunning)
+        placeShips(gameStateRunning)
+        @tailrec
+        def game(g:GameState): GameState = {
+          if (g.getActivePlayer.livePoints == 0)
+            g
+          else {
+            // Ask/get target
+            val target = g.getActivePlayer.chooseTarget()
+            // Shoot
+            g.getActivePlayer.shoot(target,g.getOpponent)
+            //Clear the console for next player
+            clearConsole()
+            //Switch Players
+            game(g.switchPlayers)
+          }
+        }
+        gameStateRunning = game(gameStateRunning)
+
         //winner add 1 to score
         gameStateRunning.getOpponent.score += 1
-        println("score : ")
-        print(gameStateRunning.getOpponent.score)
         //switch starter
-        if (startingAI.equals(gameStateRunning.getActivePlayer)) play100TimesRec(GameState(gameStateRunning.getOpponent,gameStateRunning.getActivePlayer))
-        else play100TimesRec(GameState(gameStateRunning.getActivePlayer,gameStateRunning.getOpponent))
+        if (startingAI.equals(gameStateRunning.getActivePlayer)) {
+          play100TimesRec(GameState(gameStateRunning.getOpponent,gameStateRunning.getActivePlayer))
+        }
+        else {
+          play100TimesRec(GameState(gameStateRunning.getActivePlayer,gameStateRunning.getOpponent))
+        }
       }
     }
     play100TimesRec(gameState)
   }
-  /*
-    def writeInCsv(level1: Int, score1: Int, level2: Int, score2: Int): Unit = {
 
-    }
 
-    def writeInCsv() : Unit = {
+    def writeInCsv(states: List[GameState]) : Unit = {
       val header = "AI Name; score; AI Name2; score2\n"
       var scores = ""
-      scores += "AI Level Beginner; X1; Level Medium; Y1\n"
-      scores += "AI Level Beginner;X2;Level Hard;Y2\n"
-      scores += "AI Medium;X3;Level Hard;Y3\n"
+      val game1 = states.head
+      val newStates = states.tail
+      val game2 = newStates.head
+      val newStates2 = newStates.tail
+      val game3 = newStates2.head
+      val scoreline1 = game1.getActivePlayer.name + "; " + game1.getActivePlayer.score + "; "+ game1.getOpponent.name+"; " + game1.getOpponent.score+"\n"
+      val scoreline2 = game2.getActivePlayer.name + "; " + game2.getActivePlayer.score + "; "+ game2.getOpponent.name+"; " + game2.getOpponent.score+"\n"
+      val scoreline3 = game3.getActivePlayer.name + "; " + game3.getActivePlayer.score + "; "+ game3.getOpponent.name+"; " + game3.getOpponent.score+"\n"
+      scores += scoreline1
+      scores += scoreline2
+      scores += scoreline3
 
       // File writing
-      val file = new File("../../../ai_proof.csv")
+      val file = new File("ai_proof.csv")
       val bw = new BufferedWriter(new FileWriter(file))
       bw.write(header.concat(scores))
       bw.close()
       println("The file `ai_proof.csv` was successfully created.")
-    }*/
+    }
 
   def execute() : Unit = {
-    val newGameState = easyVsMedium()
-    println("Final Scores :\n")
-    print(newGameState.getActivePlayer)
-    print(" => ")
-    print(newGameState.getActivePlayer.score)
-    print("\n")
-    print(newGameState.getOpponent)
-    print(" => ")
-    print(newGameState.getOpponent.score)
+    val state1 = easyVsMedium()
+    val state2 = easyVsDifficult()
+    val state3 = mediumVsDifficult()
+    val test = List(state1,state2,state3)
+    writeInCsv(test)
   }
-
-  execute()
 
 }

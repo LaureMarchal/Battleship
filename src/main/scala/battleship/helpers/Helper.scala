@@ -239,9 +239,32 @@ object Helper {
   // functions to display message on the console
 
   /**
-    * Gives guidelines before placing the ships
+    * Indicates what is the game
     */
-  def displayBeforePlacingShip(): Unit = {
+  def displayTitle() : Unit = {
+    println("Hello ! You are going to play a battleship !")
+  }
+  /**
+    * Indicates which mode was selected
+    * @param mode
+    */
+  def displayModeSelectionChosen(mode : Int) : Unit = {
+    mode match {
+      case 1 => println("You chose to play with another Player")
+      case 2 => println("You chose to play against the Easy AI")
+      case 3 => println("You chose to play against the Medium AI")
+      case 4 => println("You chose to play against the Difficult AI")
+      case _ => println("That's not a possibility. Try again.")
+    }
+  }
+  /**
+    * Gives guidelines before placing the ships
+    * @param name
+    */
+  def displayBeforePlacingShip(name: String): Unit = {
+    println(s"Player $name. It's your turn !\n")
+    println("You are going to place your ships.\n")
+
     println("The grid for this battleship goes from A to J on the horizontal axe and 1 and 10 on the vertical axe.")
     println("For each ship, a direction will be asked, Please Answer by N (NORTH), S (SOUTH), E (EAST) or W (WEST).")
   }
@@ -252,6 +275,42 @@ object Helper {
   def displayBeforePlaying(): Unit = {
     println("Let's Play")
     println("To do so, a target will be asked each turn.\nPlease answer like the example: A1")
+  }
+
+  /**
+    * Indicates to the player that it is his/her turn to play
+    * @param name
+    */
+  def displayPlayerTurn(name : String) : Unit = {
+    println(s"\nPlayer $name. It's your turn !\n")
+  }
+
+  /**
+    * change of turn
+    */
+  def displayChangeTurn() : Unit = {
+    println("And now the next player")
+  }
+
+  /**
+    * The AI is placing its ships
+    */
+  def displayWaitForAI() : Unit = {
+    println("Please wait. The AI is placing its ships...\n")
+  }
+
+  /**
+    * The AI turn to play
+    */
+  def displayAITurn() : Unit = {
+    println(s"\nIt's the AI turn !\n")
+  }
+
+  /**
+    * Clear the console so the next player does not see
+    */
+  def clearConsole() : Unit = {
+    print("\033[H\033[2J")
   }
 
   /**

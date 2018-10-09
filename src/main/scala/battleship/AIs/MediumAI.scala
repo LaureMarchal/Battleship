@@ -10,9 +10,9 @@ import scala.annotation.tailrec
 case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int) extends Player {
 
   override val name: String = "Medium AI"
-  override var ships: List[Ship] = Nil
+  override var ships: List[Ship] = List()
   override var score: Int = 0
-  var lastHitShots:List[Position] = Nil
+  var lastHitShots:List[Position] = List()
   var countTriedTarget: Int = 0
 
 
@@ -82,58 +82,58 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
       else chooseTarget()
     }
     else {
-      val lastHitShot = lastHitShots.head
-      countTriedTarget match {
-        case 0 =>
-          if (!lastHitShot.isLimitPositionMin(lastHitShot.x)) {
-            val target = Position(lastHitShot.y,lastHitShot.x - 1)
-            val caseAttacked = shotsGrid.grid(target.x)(target.y)
-            if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
-              countTriedTarget += 1
-              return target
+      @tailrec
+      def getNext(lastHitShot: Position) : Position = {
+        countTriedTarget match {
+          case 0 =>
+            if (!lastHitShot.isLimitPositionMin(lastHitShot.x)) {
+              val target = Position(lastHitShot.y,lastHitShot.x - 1)
+              val caseAttacked = shotsGrid.grid(target.x)(target.y)
+              if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
+                countTriedTarget += 1
+                return target
+              }
             }
-          }
-          countTriedTarget += 1
-          chooseTarget()
-        case 1 =>
-          if (!lastHitShot.isLimitPositionMax(lastHitShot.x)) {
-            val target = Position(lastHitShot.y,lastHitShot.x + 1)
-            val caseAttacked = shotsGrid.grid(target.x)(target.y)
-            if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
-              countTriedTarget += 1
-              return target
-            }
-          }
-          countTriedTarget += 1
-          chooseTarget()
-        case 2 =>
-          if (!lastHitShot.isLimitPositionMin(lastHitShot.y)) {
-            val target = Position(lastHitShot.y - 1,lastHitShot.x)
-            val caseAttacked = shotsGrid.grid(target.x)(target.y)
-            if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
-              countTriedTarget += 1
-              return target
-            }
-          }
-          countTriedTarget += 1
-          chooseTarget()
-        case 3 =>
-          val target = Position(lastHitShot.y + 1,lastHitShot.x)
-          val caseAttacked = shotsGrid.grid(target.x)(target.y)
-          if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
             countTriedTarget += 1
-            target
-          } else {
-            val last = lastHitShots.last
-            lastHitShots = last::lastHitShots.dropRight(1)
-            chooseTarget()
-          }
-        case _ =>
-          countTriedTarget = 1
-          val last = lastHitShots.last
-          lastHitShots = last::lastHitShots.dropRight(1)
-          chooseTarget()
+            getNext(lastHitShot)
+          case 1 =>
+            if (!lastHitShot.isLimitPositionMax(lastHitShot.x)) {
+              val target = Position(lastHitShot.y,lastHitShot.x + 1)
+              val caseAttacked = shotsGrid.grid(target.x)(target.y)
+              if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
+                countTriedTarget += 1
+                return target
+              }
+            }
+            countTriedTarget += 1
+            getNext(lastHitShot)
+          case 2 =>
+            if (!lastHitShot.isLimitPositionMin(lastHitShot.y)) {
+              val target = Position(lastHitShot.y - 1,lastHitShot.x)
+              val caseAttacked = shotsGrid.grid(target.x)(target.y)
+              if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
+                countTriedTarget += 1
+                return target
+              }
+            }
+            countTriedTarget += 1
+            getNext(lastHitShot)
+          case 3 =>
+            if (!lastHitShot.isLimitPositionMax(lastHitShot.y)) {
+              val target = Position(lastHitShot.y + 1,lastHitShot.x)
+              val caseAttacked = shotsGrid.grid(target.x)(target.y)
+              if (caseAttacked != CaseType.O && caseAttacked != CaseType.X) {
+                countTriedTarget += 1
+                return target
+              }
+            }
+            getNext(lastHitShots.last)
+          case _ =>
+            countTriedTarget = 1
+            getNext(lastHitShots.last)
+        }
       }
+      getNext(lastHitShots.head)
     }
   }
 
@@ -159,7 +159,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
         opponent.livePoints -= 1
         //return the result
         if (isSunkShip) {
-          lastHitShots = Nil
+          lastHitShots = List()
           countTriedTarget = 0
           CaseType.Sunk
         } else {

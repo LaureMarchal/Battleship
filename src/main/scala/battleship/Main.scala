@@ -22,6 +22,6 @@ object Main extends App {
   }
 
   // Start the game
-  println("Hello ! You are going to play a battleship !")
+  displayTitle()
   mainLoop()
 }
