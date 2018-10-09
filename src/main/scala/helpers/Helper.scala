@@ -40,6 +40,19 @@ object Helper {
   }
 
   // AI helpers functions
+
+  /**
+    * get a random position with an even int in it
+    * @return
+    */
+  def getRandomParityTarget(): Position = {
+    val random = new Random()
+    val x = random.nextInt(9)
+    val y = random.nextInt(9)
+    val toTry = random.nextInt(2)
+    if ((x % 2 == 0 && y % 2 == 0) || (x % 2 != 0 && y % 2 != 0)) if (toTry == 0) Position(x, y + 1) else  Position(x + 1, y)
+    else Position(x, y)
+  }
   /**
     * get a random target
     * @return position to shoot
@@ -160,7 +173,7 @@ object Helper {
     * Check if a list of positions is next to each other
     * @param positions list of Position where to place ship
     * @param direction string to indicate where the ship is "going"
-    * @return true if positin next to each other, false or else
+    * @return true if position next to each other, false or else
     */
   def isValidPositionList(positions :List[Position], direction : String): Boolean = {
     if (positions.size == 1)
@@ -171,14 +184,14 @@ object Helper {
       val pos2 = positionsChanged.head
       direction match {
         case `direction` if direction == "N" || direction == "S" =>
-          val diff = Math.abs(pos1.y - pos2.y)
-          if (pos1.x != pos2.x || diff != 1)
+          val diff = Math.abs(pos1.x - pos2.x)
+          if (pos1.y != pos2.y || diff != 1)
             false
           else
             isValidPositionList(positionsChanged, direction)
         case `direction` if direction == "E" || direction == "W" =>
-          val diff = Math.abs(pos1.x - pos2.x)
-          if (pos1.y != pos2.y || diff != 1)
+          val diff = Math.abs(pos1.y - pos2.y)
+          if (pos1.x != pos2.x || diff != 1)
             false
           else
             isValidPositionList(positionsChanged, direction)
@@ -246,6 +259,7 @@ object Helper {
     * Indicates to player when he/whe chose the same place for different ships
     */
   def displayPlaceOccupied(): Unit = println("Those positions are already occupied by ships. Please choose differently.")
+
   /**
     * Indicates the end of game and the name of the winner
     * @param g gamestate

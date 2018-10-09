@@ -5,7 +5,7 @@ package ship
   * @param x int for horizontal axe
   * @param y int for vertical axe
   */
-case class Position(x:Int,y:Int) {
+case class Position(y:Int,x:Int) {
 
   /**
     * Check if a position is on the grid
