@@ -1,4 +1,4 @@
-package battleship
+package ship
 
 import scala.collection.immutable.List
 

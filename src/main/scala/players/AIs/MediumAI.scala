@@ -1,9 +1,10 @@
-package battleship.AIs
+package players.AIs
 
-import battleship.helpers.CaseType.CaseType
-import battleship.helpers.Helper.{getRandomDirectionStart, getRandomTarget}
-import battleship.helpers.{BoatType, CaseType}
-import battleship.{Grid, Player, Position, Ship}
+import grid.CaseType.CaseType
+import grid.{CaseType, Grid}
+import helpers.Helper.{getRandomDirectionStart, getRandomTarget}
+import players.Player
+import ship.{BoatType, Position, Ship}
 
 import scala.annotation.tailrec
 
@@ -11,7 +12,6 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
 
   override val name: String = "Medium AI"
   override var ships: List[Ship] = Nil
-  override var score: Int = 0
   var lastHitShot:Position = _
   var countTriedTarget: Int = 0
 

@@ -1,7 +1,8 @@
-package battleship
+package players
 
-import helpers.BoatType
-import helpers.CaseType.CaseType
+import grid.CaseType.CaseType
+import grid.{CaseType, Grid}
+import ship.{BoatType, Position, Ship}
 
 /**
   * Player behavior
@@ -13,7 +14,6 @@ trait Player {
   var ships: List[Ship]
   var shipsGrid: Grid
   var shotsGrid: Grid
-  var score: Int
 
   /**
     * Place the ships of a player
