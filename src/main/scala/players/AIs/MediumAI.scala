@@ -76,7 +76,6 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
     */
   override def chooseTarget() : Position = {
     if (lastHitShot == null) {
-      println("no hit")
       val target = getRandomTarget()
       val caseAttacked = shotsGrid.grid(target.x)(target.y)
       if (caseAttacked == CaseType.M || caseAttacked == CaseType.H) {
@@ -89,7 +88,6 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
       val limitGridMaxY = lastHitShot.isLimitPositionMax(lastHitShot.y)
       countTriedTarget match {
         case 0 =>
-          println("try N")
           if (!limitGridMinY) {
             val target = Position(lastHitShot.y,lastHitShot.x - 1)
             val caseAttacked = shotsGrid.grid(target.x)(target.y)
@@ -105,7 +103,6 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
             chooseTarget()
           }
         case 1 =>
-          println("try S")
           if (!limitGridMaxY) {
             val target = Position(lastHitShot.y,lastHitShot.x + 1)
             val caseAttacked = shotsGrid.grid(target.x)(target.y)
@@ -121,7 +118,6 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
             chooseTarget()
           }
         case 2 =>
-          println("try W")
           if (!limitGridMinX) {
             val target = Position(lastHitShot.y - 1,lastHitShot.x)
             val caseAttacked = shotsGrid.grid(target.x)(target.y)
@@ -137,11 +133,9 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
             chooseTarget()
           }
         case 3 =>
-          println("try E")
           countTriedTarget += 1
           Position(lastHitShot.y + 1,lastHitShot.x)
         case _ =>
-          println("WRONG")
           countTriedTarget = 0
           lastHitShot
       }
@@ -174,11 +168,11 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
           lastHitShot = null
           countTriedTarget = 0
           CaseType.Sunk
-        }
-        else
+        } else {
           lastHitShot = target
           if (countTriedTarget > 0) countTriedTarget -= 1
           hit
+        }
       case CaseType.W =>
         val missed = CaseType.M
         // update player shotsgrid
