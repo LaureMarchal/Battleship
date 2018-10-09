@@ -13,6 +13,7 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
   override val name: String = "Difficult AI"
   override var ships: List[Ship] = Nil
   var lastShots:List[Position] = Nil
+  var countTriedTarget: Int = 0
 
   /**
     * Generate the place of a ship depending on AI level
@@ -68,46 +69,52 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
     }
   }
 
-  def generateTargetCloseToLastHit(lastHitShot: Position, countTriedTarget: Int) : (Position, Int) = {
-    if (lastHitShot == null) {
-      val target = getRandomTarget()
-      val caseAttacked = shotsGrid.grid(target.x)(target.y)
-      if (caseAttacked == CaseType.M || caseAttacked == CaseType.H) {
-        generateTargetCloseToLastHit(null,0)
-      } else
-        (target, 0)
-    } else {
-      val limitGridMinX = lastHitShot.isLimitPositionMin(lastHitShot.x)
-      val limitGridMinY = lastHitShot.isLimitPositionMin(lastHitShot.y)
-      val limitGridMaxX = lastHitShot.isLimitPositionMax(lastHitShot.x)
-      countTriedTarget match {
-        case 0 =>
-          if (!limitGridMinX) {
-            val target = Position(lastHitShot.y,lastHitShot.x - 1)
-            val caseAttacked = shotsGrid.grid(target.x)(target.y)
-            if (caseAttacked != CaseType.M && caseAttacked != CaseType.H)
-              return (target, countTriedTarget + 1)
+  /**
+    * define the hunt when a ship is hit
+    * @param lastHitShot the position hit
+    * @return the target to shoot
+    */
+  def generateTargetCloseToLastHit(lastHitShot: Position) : Position = {
+    countTriedTarget match {
+      case 0 =>
+        if (!lastHitShot.isLimitPositionMin(lastHitShot.x)) {
+          val target = Position(lastHitShot.y,lastHitShot.x - 1)
+          val caseAttacked = shotsGrid.grid(target.x)(target.y)
+          if (caseAttacked != CaseType.M && caseAttacked != CaseType.H) {
+            countTriedTarget += 1
+            return target
           }
-          generateTargetCloseToLastHit(lastHitShot,countTriedTarget + 1)
-        case 1 =>
-          if (!limitGridMaxX) {
-            val target = Position(lastHitShot.y,lastHitShot.x + 1)
-            val caseAttacked = shotsGrid.grid(target.x)(target.y)
-            if (caseAttacked != CaseType.M && caseAttacked != CaseType.H)
-              return (target, countTriedTarget + 1)
+        }
+        countTriedTarget += 1
+        generateTargetCloseToLastHit(lastHitShot)
+      case 1 =>
+        if (!lastHitShot.isLimitPositionMax(lastHitShot.x)) {
+          val target = Position(lastHitShot.y,lastHitShot.x + 1)
+          val caseAttacked = shotsGrid.grid(target.x)(target.y)
+          if (caseAttacked != CaseType.M && caseAttacked != CaseType.H) {
+            countTriedTarget += 1
+            return target
           }
-          generateTargetCloseToLastHit(lastHitShot,countTriedTarget + 1)
-        case 2 =>
-          if (!limitGridMinY) {
-            val target = Position(lastHitShot.y - 1,lastHitShot.x)
-            val caseAttacked = shotsGrid.grid(target.x)(target.y)
-            if (caseAttacked != CaseType.M && caseAttacked != CaseType.H)
-              return (target, countTriedTarget + 1)
+        }
+        countTriedTarget += 1
+        generateTargetCloseToLastHit(lastHitShot)
+      case 2 =>
+        if (!lastHitShot.isLimitPositionMin(lastHitShot.y)) {
+          val target = Position(lastHitShot.y - 1,lastHitShot.x)
+          val caseAttacked = shotsGrid.grid(target.x)(target.y)
+          if (caseAttacked != CaseType.M && caseAttacked != CaseType.H) {
+            countTriedTarget += 1
+            return target
           }
-          generateTargetCloseToLastHit(lastHitShot,countTriedTarget + 1)
-        case 3 => (Position(lastHitShot.y + 1,lastHitShot.x), countTriedTarget + 1)
-        case _ => (lastHitShot, 0)
-      }
+        }
+        countTriedTarget += 1
+        generateTargetCloseToLastHit(lastHitShot)
+      case 3 =>
+        countTriedTarget += 1
+        Position(lastHitShot.y + 1,lastHitShot.x)
+      case _ =>
+        countTriedTarget = 0
+        lastHitShot
     }
   }
 
@@ -116,7 +123,12 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
     * @return
     */
   override def chooseTarget() : Position = {
-    getRandomTarget()
+    if (lastShots.isEmpty)
+      getRandomTarget()
+    else {
+      val lastHitShot = lastShots.last
+      generateTargetCloseToLastHit(lastHitShot)
+    }
   }
 
   /**
@@ -140,9 +152,16 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
         // update opponent live points
         opponent.livePoints -= 1
         //return the result
-        if (isSunkShip) CaseType.Sunk
-        else hit
+        if (isSunkShip) {
+          lastShots = target::lastShots
+          CaseType.Sunk
+        }
+        else {
+          lastShots = target::lastShots
+          hit
+        }
       case CaseType.W =>
+        lastShots = target::lastShots
         val missed = CaseType.M
         // update player shotsgrid
         shotsGrid = shotsGrid.setCase(shotsGrid.grid, target.x, target.y, missed)
@@ -150,6 +169,7 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
         opponent.shipsGrid = opponent.shipsGrid.setCase(opponentGrid, target.x, target.y, missed)
         missed
       case `caseAttacked` if caseAttacked == CaseType.H || caseAttacked == CaseType.M =>
+        lastShots = target::lastShots
         CaseType.Tried
     }
   }
