@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>battleship</OriginalElement>
+  <nodes>
+    <node x="119.0" y="92.0">battleship.Human</node>
+    <node x="476.0" y="302.0">battleship.Game$</node>
+    <node x="113.0" y="0.0">battleship.Player</node>
+    <node x="319.0" y="555.0">battleship.Grid$</node>
+    <node x="263.0" y="655.0">battleship.Game</node>
+    <node x="149.0" y="655.0">battleship.AITest</node>
+    <node x="161.0" y="555.0">battleship.Ship$</node>
+    <node x="132.0" y="185.0">battleship.Grid</node>
+    <node x="177.0" y="455.0">battleship.Human$</node>
+    <node x="476.0" y="555.0">battleship.helpers</node>
+    <node x="-170.0" y="467.0">battleship.GameState$</node>
+    <node x="-215.0" y="263.0">battleship.Position</node>
+    <node x="0.0" y="655.0">battleship.Player$class</node>
+    <node x="0.0" y="93.0">battleship.AIs</node>
+    <node x="-274.0" y="136.0">battleship.Ship</node>
+    <node x="449.0" y="123.0">battleship.GameState</node>
+    <node x="0.0" y="455.0">battleship.Position$</node>
+    <node x="0.0" y="555.0">battleship.Main$</node>
+    <node x="375.0" y="655.0">battleship.Main</node>
+    <node x="352.0" y="455.0">battleship.AITest$</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="battleship.Human" target="battleship.Player">
+      <point x="0.0" y="-27.5" />
+      <point x="243.5" y="56.0" />
+      <point x="164.75" y="56.0" />
+      <point x="17.25" y="15.5" />
+    </edge>
+    <edge source="battleship.AIs" target="battleship.Player">
+      <point x="0.0" y="-15.5" />
+      <point x="51.5" y="56.0" />
+      <point x="130.25" y="56.0" />
+      <point x="-17.25" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="211.5" y="246.0" />
+  <SelectedNodes>
+    <node>battleship.Game$</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+    <Category>Constructors</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
