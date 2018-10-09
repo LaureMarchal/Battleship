@@ -68,6 +68,49 @@ case class DifficultAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints:
     }
   }
 
+  def generateTargetCloseToLastHit(lastHitShot: Position, countTriedTarget: Int) : (Position, Int) = {
+    if (lastHitShot == null) {
+      val target = getRandomTarget()
+      val caseAttacked = shotsGrid.grid(target.x)(target.y)
+      if (caseAttacked == CaseType.M || caseAttacked == CaseType.H) {
+        generateTargetCloseToLastHit(null,0)
+      } else
+        (target, 0)
+    } else {
+      val limitGridMinX = lastHitShot.isLimitPositionMin(lastHitShot.x)
+      val limitGridMinY = lastHitShot.isLimitPositionMin(lastHitShot.y)
+      val limitGridMaxX = lastHitShot.isLimitPositionMax(lastHitShot.x)
+      countTriedTarget match {
+        case 0 =>
+          if (!limitGridMinX) {
+            val target = Position(lastHitShot.y,lastHitShot.x - 1)
+            val caseAttacked = shotsGrid.grid(target.x)(target.y)
+            if (caseAttacked != CaseType.M && caseAttacked != CaseType.H)
+              return (target, countTriedTarget + 1)
+          }
+          generateTargetCloseToLastHit(lastHitShot,countTriedTarget + 1)
+        case 1 =>
+          if (!limitGridMaxX) {
+            val target = Position(lastHitShot.y,lastHitShot.x + 1)
+            val caseAttacked = shotsGrid.grid(target.x)(target.y)
+            if (caseAttacked != CaseType.M && caseAttacked != CaseType.H)
+              return (target, countTriedTarget + 1)
+          }
+          generateTargetCloseToLastHit(lastHitShot,countTriedTarget + 1)
+        case 2 =>
+          if (!limitGridMinY) {
+            val target = Position(lastHitShot.y - 1,lastHitShot.x)
+            val caseAttacked = shotsGrid.grid(target.x)(target.y)
+            if (caseAttacked != CaseType.M && caseAttacked != CaseType.H)
+              return (target, countTriedTarget + 1)
+          }
+          generateTargetCloseToLastHit(lastHitShot,countTriedTarget + 1)
+        case 3 => (Position(lastHitShot.y + 1,lastHitShot.x), countTriedTarget + 1)
+        case _ => (lastHitShot, 0)
+      }
+    }
+  }
+
   /**
     * choose or get the target position
     * @return
