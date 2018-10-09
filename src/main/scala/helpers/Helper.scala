@@ -160,7 +160,7 @@ object Helper {
     * Check if a list of positions is next to each other
     * @param positions list of Position where to place ship
     * @param direction string to indicate where the ship is "going"
-    * @return true if positin next to each other, false or else
+    * @return true if position next to each other, false or else
     */
   def isValidPositionList(positions :List[Position], direction : String): Boolean = {
     if (positions.size == 1)
@@ -171,14 +171,14 @@ object Helper {
       val pos2 = positionsChanged.head
       direction match {
         case `direction` if direction == "N" || direction == "S" =>
-          val diff = Math.abs(pos1.y - pos2.y)
-          if (pos1.x != pos2.x || diff != 1)
+          val diff = Math.abs(pos1.x - pos2.x)
+          if (pos1.y != pos2.y || diff != 1)
             false
           else
             isValidPositionList(positionsChanged, direction)
         case `direction` if direction == "E" || direction == "W" =>
-          val diff = Math.abs(pos1.x - pos2.x)
-          if (pos1.y != pos2.y || diff != 1)
+          val diff = Math.abs(pos1.y - pos2.y)
+          if (pos1.x != pos2.x || diff != 1)
             false
           else
             isValidPositionList(positionsChanged, direction)
@@ -246,6 +246,7 @@ object Helper {
     * Indicates to player when he/whe chose the same place for different ships
     */
   def displayPlaceOccupied(): Unit = println("Those positions are already occupied by ships. Please choose differently.")
+
   /**
     * Indicates the end of game and the name of the winner
     * @param g gamestate

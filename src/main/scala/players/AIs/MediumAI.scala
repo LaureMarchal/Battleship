@@ -30,16 +30,16 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
       else {
         direction match {
           case "N" =>
-            val newPos = Position(posStart.x,posStart.y - 1)
+            val newPos = Position(posStart.y,posStart.x - 1)
             generateRandom(direction,newPos,size,newPos::list)
           case "S" =>
-            val newPos = Position(posStart.x,posStart.y + 1)
+            val newPos = Position(posStart.y,posStart.x + 1)
             generateRandom(direction,newPos,size,newPos::list)
           case "E" =>
-            val newPos = Position(posStart.x + 1,posStart.y)
+            val newPos = Position(posStart.y + 1,posStart.x)
             generateRandom(direction,newPos,size,newPos::list)
           case "W" =>
-            val newPos = Position(posStart.x - 1,posStart.y)
+            val newPos = Position(posStart.y - 1,posStart.x)
             generateRandom(direction,newPos,size,newPos::list)
         }
       }
@@ -91,7 +91,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
         case 0 =>
           println("try N")
           if (!limitGridMinY) {
-            val target = Position(lastHitShot.x,lastHitShot.y - 1)
+            val target = Position(lastHitShot.y,lastHitShot.x - 1)
             val caseAttacked = shotsGrid.grid(target.x)(target.y)
             if (caseAttacked == CaseType.M || caseAttacked == CaseType.H) {
               countTriedTarget += 1
@@ -107,7 +107,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
         case 1 =>
           println("try S")
           if (!limitGridMaxY) {
-            val target = Position(lastHitShot.x,lastHitShot.y + 1)
+            val target = Position(lastHitShot.y,lastHitShot.x + 1)
             val caseAttacked = shotsGrid.grid(target.x)(target.y)
             if (caseAttacked == CaseType.M || caseAttacked == CaseType.H) {
               countTriedTarget += 1
@@ -123,7 +123,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
         case 2 =>
           println("try W")
           if (!limitGridMinX) {
-            val target = Position(lastHitShot.x - 1,lastHitShot.y)
+            val target = Position(lastHitShot.y - 1,lastHitShot.x)
             val caseAttacked = shotsGrid.grid(target.x)(target.y)
             if (caseAttacked == CaseType.M || caseAttacked == CaseType.H) {
               countTriedTarget += 1
@@ -139,7 +139,7 @@ case class MediumAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: In
         case 3 =>
           println("try E")
           countTriedTarget += 1
-          Position(lastHitShot.x + 1,lastHitShot.y)
+          Position(lastHitShot.y + 1,lastHitShot.x)
         case _ =>
           println("WRONG")
           countTriedTarget = 0

@@ -4,7 +4,7 @@ import grid.{CaseType, Grid}
 import helpers.Helper._
 import players.AIs.{DifficultAI, EasyAI, MediumAI}
 import players.{Human, Player}
-import ship.BoatType
+import ship.{BoatType, Position, Ship}
 
 import scala.annotation.tailrec
 
@@ -14,8 +14,8 @@ import scala.annotation.tailrec
 object Game {
 
   //ships configuration in battleship
-  //val shipsType : List[BoatType] = getBoatConfiguration()
-  val shipsType : List[BoatType] = List(BoatType("Submarine",3),BoatType("Destroyer",2))
+  val shipsType : List[BoatType] = getBoatConfiguration()
+  //val shipsType : List[BoatType] = List(BoatType("Submarine",3),BoatType("Destroyer",2))
   //val shipsType : List[BoatType] = List(BoatType("Destroyer",2))
 
   /**
@@ -89,7 +89,42 @@ object Game {
           println(s"Player $name. It's your turn !\n")
           println("You are going to place your ships.\n")
           displayBeforePlacingShip()
-          val listShips = g.getActivePlayer.placeShips(shipsType)
+          //val listShips = g.getActivePlayer.placeShips(shipsType)
+
+          //to remove after test
+          var listShips :List[Ship] = Nil
+          //ship 1
+          var newShip = Ship("Carrier", "S", List(Position(0,0),Position(0,1),Position(0,2),Position(0,3),Position(0,4)))
+          listShips = newShip::listShips
+          //place it on the grid
+          g.getActivePlayer.shipsGrid = g.getActivePlayer.shipsGrid.placeOneShip(newShip,g.getActivePlayer.shipsGrid.grid)
+
+          //ship 2
+          newShip = Ship("Battleship", "E", List(Position(1,1),Position(2,1),Position(3,1),Position(4,1)))
+          listShips = newShip::listShips
+          //place it on the grid
+          g.getActivePlayer.shipsGrid = g.getActivePlayer.shipsGrid.placeOneShip(newShip,g.getActivePlayer.shipsGrid.grid)
+
+          //ship 3
+          newShip = Ship("Cruiser", "S", List(Position(4,2),Position(4,3),Position(4,4)))
+          listShips = newShip::listShips
+          //place it on the grid
+          g.getActivePlayer.shipsGrid = g.getActivePlayer.shipsGrid.placeOneShip(newShip,g.getActivePlayer.shipsGrid.grid)
+
+          //ship 4
+          newShip = Ship("Submarine", "N", List(Position(7,7),Position(7,6),Position(7,5)))
+          listShips = newShip::listShips
+          //place it on the grid
+          g.getActivePlayer.shipsGrid = g.getActivePlayer.shipsGrid.placeOneShip(newShip,g.getActivePlayer.shipsGrid.grid)
+
+          //ship 5
+          newShip = Ship("Destroyer", "W", List(Position(9,9),Position(8,9)))
+          listShips = newShip::listShips
+          //place it on the grid
+          g.getActivePlayer.shipsGrid = g.getActivePlayer.shipsGrid.placeOneShip(newShip,g.getActivePlayer.shipsGrid.grid)
+
+          //end test
+
           g.getActivePlayer.ships = listShips
           // To display the grid properly to the user
           g.getActivePlayer.shipsGrid.displayGrid()
