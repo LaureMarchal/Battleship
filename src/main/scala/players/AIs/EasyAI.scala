@@ -34,16 +34,16 @@ case class EasyAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int)
       else {
         direction match {
           case "N" =>
-            val newPos = Position(posStart.x,posStart.y - 1)
+            val newPos = Position(posStart.y,posStart.x - 1)
             generateRandom(direction,newPos,size,newPos::list)
           case "S" =>
-            val newPos = Position(posStart.x,posStart.y + 1)
+            val newPos = Position(posStart.y,posStart.x + 1)
             generateRandom(direction,newPos,size,newPos::list)
           case "E" =>
-            val newPos = Position(posStart.x + 1,posStart.y)
+            val newPos = Position(posStart.y + 1,posStart.x)
             generateRandom(direction,newPos,size,newPos::list)
           case "W" =>
-            val newPos = Position(posStart.x - 1,posStart.y)
+            val newPos = Position(posStart.y - 1,posStart.x)
             generateRandom(direction,newPos,size,newPos::list)
         }
       }
@@ -93,7 +93,7 @@ case class EasyAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int)
     val caseAttacked = opponentGrid(target.x)(target.y)
     caseAttacked match {
       case CaseType.S =>
-        val hit = CaseType.H
+        val hit = CaseType.X
         // update player shotsgrid
         shotsGrid = shotsGrid.setCase(shotsGrid.grid, target.x, target.y, hit)
         // update opponent ships grid
@@ -103,18 +103,16 @@ case class EasyAI(var shipsGrid: Grid, var shotsGrid: Grid, var livePoints: Int)
         // update opponent live points
         opponent.livePoints -= 1
         //return the result
-        if (isSunkShip)
-          CaseType.Sunk
-        else
-          hit
+        if (isSunkShip) CaseType.Sunk
+        else hit
       case CaseType.W =>
-        val missed = CaseType.M
+        val missed = CaseType.O
         // update player shotsgrid
         shotsGrid = shotsGrid.setCase(shotsGrid.grid, target.x, target.y, missed)
         // update opponent ships grid
         opponent.shipsGrid = opponent.shipsGrid.setCase(opponentGrid, target.x, target.y, missed)
         missed
-      case `caseAttacked` if caseAttacked == CaseType.H || caseAttacked == CaseType.M =>
+      case `caseAttacked` if caseAttacked == CaseType.X || caseAttacked == CaseType.O =>
         CaseType.Tried
     }
   }
